@@ -2,7 +2,7 @@ package org.example.controllers;
 
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.Date;
-import org.example.dto.TripDTO;
+import org.example.dto.NewTripDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
@@ -37,10 +37,10 @@ public class TripController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Object> createTrip(@RequestBody TripDTO tripDTO){
+    public ResponseEntity<Object> createTrip(@RequestBody NewTripDTO tripDTO){
 
         Date date = new Date(tripDTO.departure, tripDTO.departure);
-        Trip newTrip = createTripService.createNewTrip(tripDTO.tripId, tripDTO.origCity, tripDTO.destCity, date);
-        return new ResponseEntity<>(newTrip, HttpStatus.OK);
+        NewTripDTO newTripDto = createTripService.createNewTrip(tripDTO.tripId, tripDTO.origCity, tripDTO.destCity, date);
+        return new ResponseEntity<>(newTripDto, HttpStatus.OK);
     }
 }

@@ -39,7 +39,14 @@ public class TripRepository implements TripRepositoryInt {
     }
 
     @Override
-    public List<Trip> findAll(){
-        return new ArrayList<>(trips);
+    public List<Trip> findAll() {
+        try {
+            List<Trip> tripsFound = new ArrayList<>();
+            tripsFound.addAll(trips);
+
+            return new ArrayList<>(trips);
+        } catch (Exception e) {
+            throw new NullPointerException("List is Empty");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.example.domain.Trip;
 
+import lombok.Getter;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.Date;
 import org.example.domain.valueobjects.Name;
@@ -10,12 +11,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Trip {
+    @Getter
     private final TripId tripId;
-
+    @Getter
     private final City orgCity;
-
+    @Getter
     private final City destCity;
-
+    @Getter
     private final Date date;
 
     protected Trip(TripId tripId, City orgCity, City destCity, Date date) {

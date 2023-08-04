@@ -1,10 +1,19 @@
 package org.example.domain.valueobjects;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Objects;
-
+@NoArgsConstructor
 public class TripId {
+    @Getter
+    @Setter
+    private Long tripId;
 
-    private final Long tripId;
+    public TripId(Long tripId){
+        this.tripId = tripId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -19,7 +28,5 @@ public class TripId {
         return Objects.hash(tripId);
     }
 
-    public TripId(Long tripId){
-        this.tripId = tripId;
-    }
+
 }

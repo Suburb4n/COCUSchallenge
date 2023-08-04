@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,4 +84,14 @@ class TripRepositoryTest {
         assertFalse(result);
     }
 
+    @Test
+    void findAllEmpty(){
+        String expected = "List is Empty";
+        //Act
+        Exception e = assertThrows(NullPointerException.class, ()->{
+            repository.findAll();
+        });
+        //Assert
+        assertEquals(expected, e.getMessage());
+    }
 }

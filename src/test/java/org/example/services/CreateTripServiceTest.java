@@ -7,6 +7,8 @@ import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.Date;
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
+import org.example.dto.NewTripDTO;
+import org.example.dto.assembler.NewTripDataAssembler;
 import org.example.repositories.TripRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +32,13 @@ class CreateTripServiceTest {
 
     @MockBean
     private TripRepository repository;
+
+    @MockBean
+    private NewTripDataAssembler assembler;
     @MockBean
     private Trip trip;
+    @MockBean
+    private NewTripDTO dto;
     @MockBean
     private TripFactory factory;
     @MockBean
@@ -43,7 +50,7 @@ class CreateTripServiceTest {
 
     @BeforeEach
     void setUp(){
-        service = new CreateTripService(repository, factory);
+        service = new CreateTripService(repository, factory, assembler);
     }
 
     @Test
@@ -51,10 +58,11 @@ class CreateTripServiceTest {
         //Arrange
         when(factory.createTrip(tripId, city,city,date)).thenReturn(trip);
         when(repository.save(trip)).thenReturn(true);
+        when(assembler.toDto(trip)).thenReturn(dto);
         //Act
-        Trip result = service.createNewTrip(tripId, city, city, date);
+        NewTripDTO result = service.createNewTrip(tripId, city, city, date);
         //Assert
-        assertEquals(trip, result);
+        assertEquals(dto, result);
         verify(repository).save(trip);
     }
 

@@ -1,10 +1,9 @@
 package org.example.controllers;
 
-import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.Date;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.TripDTO;
+import org.example.dto.NewTripDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
@@ -28,7 +27,7 @@ class TripControllerTest {
 
     private TripController controller;
 
-    public TripDTO tripDTO;
+    public NewTripDTO tripDTO;
 
     private Date dates;
     @MockBean
@@ -50,13 +49,13 @@ class TripControllerTest {
     private LocalDate date;
 
     @MockBean
-    private Trip trip;
+    private NewTripDTO tripDto;
 
     @BeforeEach
     void setUp(){
         controller = new TripController(createService, addService,
                 listService, deleteService);
-        this.tripDTO = new TripDTO();
+        this.tripDTO = new NewTripDTO();
         this.tripDTO.tripId = tripId;
         this.tripDTO.origCity = city;
         this.tripDTO.destCity = city;
@@ -68,7 +67,7 @@ class TripControllerTest {
     @Test
     void createTrip_created(){
         //Arrange
-        when(createService.createNewTrip(tripId, city, city,dates )).thenReturn(trip);
+        when(createService.createNewTrip(tripId, city, city,dates )).thenReturn(tripDto);
         //Act
         ResponseEntity<Object> result = controller.createTrip(tripDTO);
         //Assert

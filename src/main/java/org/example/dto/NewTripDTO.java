@@ -5,7 +5,7 @@ import org.example.domain.valueobjects.TripId;
 
 import java.time.LocalDate;
 
-public class TripDTO {
+public class NewTripDTO {
 
     public TripId tripId;
 

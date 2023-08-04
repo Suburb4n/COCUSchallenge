@@ -1,6 +1,4 @@
 package org.example.domain.Trip;
-
-import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.Date;
 import org.example.domain.valueobjects.Name;
@@ -8,7 +6,6 @@ import org.example.domain.valueobjects.TripId;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +42,7 @@ class TripTest {
     }
 
     @Test
-    void equalsAndHashCode_isEqual(){
+    void equals_isEqual(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
                 new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
