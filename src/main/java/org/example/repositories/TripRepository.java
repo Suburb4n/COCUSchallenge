@@ -1,9 +1,10 @@
 package org.example.repositories;
 
-import org.example.domain.Trip;
+import org.example.domain.Trip.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -29,11 +30,16 @@ public class TripRepository implements TripRepositoryInt {
     public Boolean deleteById(Trip trip) {
         boolean isDeleted = false;
         for (int i = 0; i < trips.size(); i++) {
-            if (trip.equals(trips.get(i))) {
+            if (trip.checkSame(trips.get(i))) {
                 trips.remove(i);
                 isDeleted=true;
             }
         }
         return isDeleted;
+    }
+
+    @Override
+    public List<Trip> findAll(){
+        return new ArrayList<>(trips);
     }
 }

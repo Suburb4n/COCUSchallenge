@@ -1,15 +1,13 @@
 package org.example.repositories;
 
-import org.example.domain.Trip;
+import org.example.domain.Trip.Trip;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,8 +26,7 @@ class TripRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        TripRepositoryInt repository = new TripRepository(trips);
-        this.repository = repository;
+        this.repository  = new TripRepository(trips);
     }
 
     @Test
@@ -54,6 +51,35 @@ class TripRepositoryTest {
 
         //Assert
         verify(trips).contains(newTrip);
+        assertFalse(result);
+    }
+
+    @Test
+    void deleteById_Valid(){
+        //Arrange
+        when(trips.size()).thenReturn(1);
+        when(trips.get(0)).thenReturn(newTrip);
+        when(newTrip.checkSame(newTrip)).thenReturn(true);
+
+        //Act
+        Boolean result = repository.deleteById(newTrip);
+
+        //Assert
+        verify(trips).remove(0);
+        assertTrue(result);
+    }
+
+    @Test
+    void deleteById_IdNotFound(){
+        //Arrange
+        when(trips.size()).thenReturn(1);
+        when(trips.get(0)).thenReturn(newTrip);
+        when(newTrip.checkSame(newTrip)).thenReturn(false);
+
+        //Act
+        Boolean result = repository.deleteById(newTrip);
+
+        //Assert
         assertFalse(result);
     }
 

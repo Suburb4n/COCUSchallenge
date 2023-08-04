@@ -1,4 +1,4 @@
-package org.example.domain;
+package org.example.domain.People;
 
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
