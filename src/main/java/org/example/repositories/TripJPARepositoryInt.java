@@ -4,8 +4,8 @@ import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
 import org.example.domainmodel.TripJPA;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -15,7 +15,7 @@ public interface TripJPARepositoryInt extends CrudRepository<TripJPA, TripId> {
 
     TripJPA save(Trip trip);
 
-    boolean deleteByTripId(Long tripId);
+    Integer removeByTripId(TripId tripId);
 
-    Iterable<TripJPA> findAll();
+    List<TripJPA> findAll();
 }

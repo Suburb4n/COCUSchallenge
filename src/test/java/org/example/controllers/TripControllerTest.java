@@ -1,15 +1,14 @@
 package org.example.controllers;
 
 import org.example.domain.valueobjects.*;
-import org.example.dto.AddPeopleDTO;
-import org.example.dto.NewTripDTO;
+import org.example.dto.FullTripDTO;
 import org.example.dto.PeopleDTO;
+import org.example.dto.NewTripDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
 import org.example.services.ListTripsService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,6 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -47,12 +48,16 @@ class TripControllerTest {
 
 
     private LocalDate date;
+    @MockBean
+    private List<FullTripDTO> mockList;
+    @MockBean
+    private FullTripDTO fullTripDto;
 
     @MockBean
     private NewTripDTO tripDto;
 
     @MockBean
-    private AddPeopleDTO addedPeopleDto;
+    private PeopleDTO addedPeopleDto;
 
     private PeopleDTO peopleDto;
     private Long id;
@@ -138,7 +143,6 @@ class TripControllerTest {
     @Test
     void deleteTripByTripId_notFound(){
         //Arrange
-
         String expected = "Trip not found!";
         int statusCode = 400;
         when(deleteService.deleteTripById(tripId)).thenReturn(false);
@@ -147,5 +151,28 @@ class TripControllerTest {
         //Assert
         assertEquals(statusCode, result.getStatusCodeValue());
         assertEquals(expected, result.getBody());
+    }
+
+    @Test
+    void listTrips_Empty(){
+        //Arrange
+        int statusCode = 400;
+        when(listService.listAllTrips()).thenThrow(IllegalArgumentException.class);
+        //Act
+        ResponseEntity<Object> result = controller.listTrips();
+        //Assert
+        assertEquals(statusCode, result.getStatusCodeValue());
+    }
+
+    @Test
+    void listTrips_Populated(){
+        //Arrange
+        int statusCode = 200;
+        when(listService.listAllTrips()).thenReturn(mockList);
+        when(mockList.isEmpty()).thenReturn(false);
+        //Act
+        ResponseEntity<Object> result = controller.listTrips();
+        //Assert
+        assertEquals(statusCode, result.getStatusCodeValue());
     }
 }

@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.People;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.AddPeopleDTO;
+import org.example.dto.PeopleDTO;
 import org.example.dto.assembler.AddPeopleMapper;
 import org.example.repositories.TripRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ class AddPeopleServiceTest {
     private TripId tripId;
 
     @MockBean
-    private AddPeopleDTO peopleDto;
+    private PeopleDTO peopleDto;
 
     @BeforeEach
     void setTup(){
@@ -55,7 +55,7 @@ class AddPeopleServiceTest {
         when(mapper.toDto(tripId, people)).thenReturn(peopleDto);
 
         //Act
-        AddPeopleDTO result = service.addPeopleToTrip(people,tripId);
+        PeopleDTO result = service.addPeopleToTrip(people,tripId);
         //Assert
         assertEquals(peopleDto, result);
     }

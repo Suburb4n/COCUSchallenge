@@ -68,14 +68,13 @@ class TripRepositoryTest {
     @Test
     void deleteById_Valid() {
         //Arrange
-        Long test = 1L;
+        TripId id = new TripId(1L);
         when(jpaRepositoryInt.existsById(tripId)).thenReturn(true);
-        when(tripId.getTripId()).thenReturn(test);
         //Act
         Boolean result = repository.deleteByTripId(tripId);
 
         //Assert
-        verify(jpaRepositoryInt).deleteByTripId(test);
+        verify(jpaRepositoryInt).removeByTripId(any(TripId.class));
         assertTrue(result);
     }
 

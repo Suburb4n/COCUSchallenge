@@ -56,7 +56,7 @@ public class TripRepository implements TripRepositoryInt {
     public boolean deleteByTripId(TripId tripId) {
         boolean isDeleted = false;
         if (jpaRepository.existsById(tripId)) {
-            jpaRepository.deleteByTripId(tripId.getTripId());
+            jpaRepository.removeByTripId(tripId);
             isDeleted = true;
         }
         return isDeleted;
@@ -64,12 +64,11 @@ public class TripRepository implements TripRepositoryInt {
 
     @Override
     public List<Trip> findAll() {
-        Iterable<TripJPA> listFound = jpaRepository.findAll();
-        if(!listFound.iterator().hasNext()){
+        List<TripJPA> listFound = jpaRepository.findAll();
+        if(listFound.isEmpty()){
             throw new IllegalArgumentException("No Trips saved.");
         }
-        List<TripJPA> listJpa = new ArrayList<>();
-        listFound.forEach(listJpa::add);
-        return assembler.listToDomain(listJpa);
+
+        return assembler.listToDomain(listFound);
     }
 }

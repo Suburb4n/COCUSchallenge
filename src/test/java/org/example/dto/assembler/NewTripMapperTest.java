@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-class NewTripDataAssemblerTest {
+class NewTripMapperTest {
 
     private NewTripMapper assembler;
 

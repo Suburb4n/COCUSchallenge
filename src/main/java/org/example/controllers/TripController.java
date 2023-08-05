@@ -4,9 +4,9 @@ import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.People;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.AddPeopleDTO;
-import org.example.dto.NewTripDTO;
 import org.example.dto.PeopleDTO;
+import org.example.dto.NewTripDTO;
+import org.example.dto.FullTripDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/Trips")
@@ -55,7 +57,7 @@ public class TripController {
             TripId newTripId = new TripId(tripId);
             Name name = new Name(peopleDto.firstName, peopleDto.lastName);
             People people = new People(name, newTripId);
-            AddPeopleDTO peopleToAdd = addService.addPeopleToTrip(people, newTripId);
+            PeopleDTO peopleToAdd = addService.addPeopleToTrip(people, newTripId);
 
             return new ResponseEntity<>(peopleToAdd, HttpStatus.OK);
         } catch (Exception e) {
@@ -70,6 +72,16 @@ public class TripController {
         if (operationSuccess) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>("Trip not found!",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Trip not found!", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Object> listTrips() {
+        try {
+            List<FullTripDTO> list = listTripsService.listAllTrips();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

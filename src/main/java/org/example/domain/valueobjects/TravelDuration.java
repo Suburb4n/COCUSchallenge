@@ -14,9 +14,9 @@ public class TravelDuration implements ValueObject {
     @Getter
     private LocalDate departure;
 
-    public TravelDuration(LocalDate startDate, LocalDate endDate) {
-        this.arrival = startDate;
-        this.departure = endDate;
+    public TravelDuration(LocalDate departure, LocalDate arrival) {
+        this.departure = departure;
+        this.arrival = arrival;
     }
 
     @Override

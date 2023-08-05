@@ -3,7 +3,7 @@ package org.example.dto.assembler;
 import org.example.domain.valueobjects.People;
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.AddPeopleDTO;
+import org.example.dto.PeopleDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class AddPeopleMapperTest {
 
     private AddPeopleMapper assembler;
-    private AddPeopleDTO expected;
+    private PeopleDTO expected;
     @MockBean
     private TripId tripId;
 
@@ -29,7 +29,7 @@ class AddPeopleMapperTest {
     @BeforeEach
     void setUp() {
         assembler = new AddPeopleMapper();
-        expected = new AddPeopleDTO();
+        expected = new PeopleDTO();
     }
 
     @Test
@@ -41,7 +41,7 @@ class AddPeopleMapperTest {
         expected.lastName = "Luis";
         when(person.getName()).thenReturn(name);
         //Act
-        AddPeopleDTO result = assembler.toDto(tripId, person);
+        PeopleDTO result = assembler.toDto(tripId, person);
         //Assert
         assertEquals(expected.tripId, result.tripId);
         assertEquals(expected.firstName, result.firstName);

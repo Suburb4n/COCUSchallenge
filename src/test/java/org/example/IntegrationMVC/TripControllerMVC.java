@@ -33,6 +33,7 @@ public class TripControllerMVC {
 
     @Test
     void tripController_CreateTrip() throws Exception {
+        //Adds first Trip
         NewTripDTO tripDTO = new NewTripDTO();
         tripDTO.tripId = new TripId(1L);
         tripDTO.origCity = new City("Orleans");
@@ -51,7 +52,7 @@ public class TripControllerMVC {
 
         String resultContent1 = resultCreated.getResponse().getContentAsString();
         assertNotNull(resultContent1);
-
+        // Tries to add the same Trip, should fail
         MvcResult resultAlreadyExists = mockMvc
                 .perform(MockMvcRequestBuilders.post("/Trips")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,4 +121,96 @@ public class TripControllerMVC {
         System.out.println(resultContent1);
     }
 
+    @Test
+    void tripController_DeleteATrip() throws Exception {
+        //Adds a trip to database
+        NewTripDTO tripDTO = new NewTripDTO();
+        tripDTO.tripId = new TripId(4L);
+        tripDTO.origCity = new City("Orleans");
+        tripDTO.destCity = new City("Miami");
+        tripDTO.departure = LocalDate.of(2023, 01, 10);
+        tripDTO.arrival = LocalDate.of(2023, 01, 20);
+
+        MvcResult resultCreated = mockMvc
+                .perform(MockMvcRequestBuilders.post("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tripDTO))
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        PeopleDTO peopleDTO = new PeopleDTO();
+        peopleDTO.firstName = "Joao";
+        peopleDTO.lastName = "Luis";
+
+        String tripId = "4";
+        //Deletes said Trip
+        MvcResult resultDeleted = mockMvc
+                .perform(MockMvcRequestBuilders.delete("/Trips/remove={tripId}", tripId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String resultContent1 = resultDeleted.getResponse().getContentAsString();
+        assertNotNull(resultContent1);
+
+        //Tries to delete already deleted Trip
+        MvcResult resultnotFound = mockMvc
+                .perform(MockMvcRequestBuilders.delete("/Trips/remove={tripId}", tripId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String resultContent2 = resultnotFound.getResponse().getContentAsString();
+        assertNotNull(resultContent2);
+    }
+
+    @Test
+    void tripController_ListAllTrips() throws Exception {
+        //Tries to get trips on an empty DB
+        MvcResult resultNotFound = mockMvc
+                .perform(MockMvcRequestBuilders.get("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String resultContent1 = resultNotFound.getResponse().getContentAsString();
+        assertNotNull(resultContent1);
+
+        //Adds a trip to database
+        NewTripDTO tripDTO = new NewTripDTO();
+        tripDTO.tripId = new TripId(5L);
+        tripDTO.origCity = new City("Orleans");
+        tripDTO.destCity = new City("Miami");
+        tripDTO.departure = LocalDate.of(2023, 01, 10);
+        tripDTO.arrival = LocalDate.of(2023, 01, 20);
+
+        MvcResult resultCreated = mockMvc
+                .perform(MockMvcRequestBuilders.post("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tripDTO))
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //Queries populated table for trips
+        MvcResult resultFound = mockMvc
+                .perform(MockMvcRequestBuilders.get("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String resultContent2 = resultFound.getResponse().getContentAsString();
+        assertNotNull(resultContent2);
+    }
 }
