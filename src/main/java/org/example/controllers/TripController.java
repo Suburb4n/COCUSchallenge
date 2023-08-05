@@ -12,11 +12,15 @@ import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
 import org.example.services.ListTripsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/Trips")
@@ -45,6 +49,12 @@ public class TripController {
         try {
             TravelDuration date = new TravelDuration(tripDTO.departure, tripDTO.departure);
             NewTripDTO newTripDto = createTripService.createNewTrip(tripDTO.tripId, tripDTO.origCity, tripDTO.destCity, date);
+
+            Link link = linkTo(methodOn(TripController.class)
+                    .createTrip(tripDTO))
+                    .withSelfRel();
+            newTripDto.add(link);
+
             return new ResponseEntity<>(newTripDto, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -58,6 +68,12 @@ public class TripController {
             Name name = new Name(peopleDto.firstName, peopleDto.lastName);
             People people = new People(name, newTripId);
             PeopleDTO peopleToAdd = addService.addPeopleToTrip(people, newTripId);
+            Link link = linkTo(methodOn(TripController.class)
+                    .addPeopleToTrip(tripId, peopleDto))
+                    .slash(tripId)
+                    .withRel("Trip");
+
+            peopleToAdd.add(link);
 
             return new ResponseEntity<>(peopleToAdd, HttpStatus.OK);
         } catch (Exception e) {
@@ -79,6 +95,14 @@ public class TripController {
     public ResponseEntity<Object> listTrips() {
         try {
             List<FullTripDTO> list = listTripsService.listAllTrips();
+            for(int i = 0; i<list.size(); i++){
+                Link link = linkTo(methodOn(TripController.class)
+                        .listTrips())
+                        .slash(list.get(i).tripId.getTripId()).
+                        withRel("Trip");
+                list.get(i).add(link);
+            }
+
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

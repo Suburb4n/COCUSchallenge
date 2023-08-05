@@ -5,8 +5,8 @@ import org.example.domain.valueobjects.TripId;
 
 import java.time.LocalDate;
 import java.util.List;
-
-public class FullTripDTO {
+import org.springframework.hateoas.RepresentationModel;
+public class FullTripDTO extends RepresentationModel<FullTripDTO>{
 
 
     public TripId tripId;
