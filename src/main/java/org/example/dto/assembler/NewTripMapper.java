@@ -5,7 +5,7 @@ import org.example.dto.NewTripDTO;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NewTripDataAssembler {
+public class NewTripMapper {
 
     public NewTripDTO toDto(Trip trip) {
         NewTripDTO dto = new NewTripDTO();

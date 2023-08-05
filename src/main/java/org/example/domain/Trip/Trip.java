@@ -40,13 +40,11 @@ public class Trip implements AggregateRoot<TripId> {
         this.people = new ArrayList<>(people);
     }
 
-    public void addPeople(List<People> peopleToAdd){
-        for(int i = 0; i<peopleToAdd.size();i++){
-            if(this.people.contains(peopleToAdd.get(i))){
-                continue;
+    public void addPeople(People peopleToAdd){
+            if(this.people.contains(peopleToAdd)){
+                throw new IllegalArgumentException("Person is already on trip");
             }
-            people.add(peopleToAdd.get(i));
-        }
+            people.add(peopleToAdd);
     }
 
     @Override

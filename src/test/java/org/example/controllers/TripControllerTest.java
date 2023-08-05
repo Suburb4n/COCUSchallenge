@@ -1,9 +1,12 @@
 package org.example.controllers;
 
 import org.example.domain.valueobjects.City;
+import org.example.domain.valueobjects.People;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
+import org.example.dto.AddPeopleDTO;
 import org.example.dto.NewTripDTO;
+import org.example.dto.PeopleDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
@@ -51,10 +54,19 @@ class TripControllerTest {
     @MockBean
     private NewTripDTO tripDto;
 
+    @MockBean
+    private AddPeopleDTO addedPeopleDto;
+
+    @MockBean
+    private PeopleDTO peopleDto;
+
+    @MockBean
+    private People people;
+
     @BeforeEach
     void setUp(){
         controller = new TripController(createService,
-                listService, deleteService);
+                listService, deleteService, addService);
         this.tripDTO = new NewTripDTO();
         this.tripDTO.tripId = tripId;
         this.tripDTO.origCity = city;
@@ -70,6 +82,37 @@ class TripControllerTest {
         when(createService.createNewTrip(tripId, city, city,dates )).thenReturn(tripDto);
         //Act
         ResponseEntity<Object> result = controller.createTrip(tripDTO);
+        //Assert
+        assertEquals(200, result.getStatusCodeValue());
+    }
+    @Test
+    void createTrip_alreadyExists(){
+        //Arrange
+        when(createService.createNewTrip(tripId, city, city,dates )).thenThrow(IllegalArgumentException.class);
+        //Act
+        ResponseEntity<Object> result = controller.createTrip(tripDTO);
+        //Assert
+        assertEquals(400, result.getStatusCodeValue());
+    }
+
+    @Test
+    void addPeopleToTripSuccess(){
+        //Arrange
+        Long id = 1L;
+        when(addService.addPeopleToTrip(people, tripId)).thenReturn(addedPeopleDto);
+        //Act
+        ResponseEntity<Object> result = controller.addPeopleToTrip(id, peopleDto);
+        //Assert
+        assertEquals(200, result.getStatusCodeValue());
+    }
+
+    @Test
+    void addPeopleToTrip_PeopleAlreadyInTrip(){
+        //Arrange
+        Long id = 1L;
+        when(addService.addPeopleToTrip(people, tripId)).thenThrow(IllegalArgumentException.class);
+        //Act
+        ResponseEntity<Object> result = controller.addPeopleToTrip(id, peopleDto);
         //Assert
         assertEquals(200, result.getStatusCodeValue());
     }

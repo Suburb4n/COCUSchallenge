@@ -6,7 +6,7 @@ import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.dto.NewTripDTO;
-import org.example.dto.assembler.NewTripDataAssembler;
+import org.example.dto.assembler.NewTripMapper;
 import org.example.repositories.TripRepositoryInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class CreateTripService {
 
     private TripFactoryInt factory;
 
-    private final NewTripDataAssembler assembler;
+    private final NewTripMapper assembler;
 
     @Autowired
-    public CreateTripService(TripRepositoryInt repository, TripFactoryInt factory, NewTripDataAssembler assembler) {
+    public CreateTripService(TripRepositoryInt repository, TripFactoryInt factory, NewTripMapper assembler) {
         this.repository = repository;
         this.factory = factory;
         this.assembler = assembler;

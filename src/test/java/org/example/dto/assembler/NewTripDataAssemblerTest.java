@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class NewTripDataAssemblerTest {
 
-    private NewTripDataAssembler assembler;
+    private NewTripMapper assembler;
 
     private NewTripDTO expected;
     @MockBean
@@ -31,7 +31,7 @@ class NewTripDataAssemblerTest {
 
     @BeforeEach
     void setUp(){
-        assembler = new NewTripDataAssembler();
+        assembler = new NewTripMapper();
         expected = new NewTripDTO();
         expected.tripId = new TripId(1L);
         expected.origCity = new City("Orleans");

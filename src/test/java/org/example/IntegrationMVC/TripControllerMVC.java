@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TripId;
 import org.example.dto.NewTripDTO;
+import org.example.dto.PeopleDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -61,6 +62,60 @@ public class TripControllerMVC {
                 .andReturn();
 
         String resultContent2 = resultAlreadyExists.getResponse().getContentAsString();
+        assertNotNull(resultContent2);
+        System.out.println(resultContent1);
+    }
+
+    @Test
+    void tripController_AddPeopleToTrip() throws Exception {
+        //Adds a trip to database
+        NewTripDTO tripDTO = new NewTripDTO();
+        tripDTO.tripId = new TripId(3L);
+        tripDTO.origCity = new City("Orleans");
+        tripDTO.destCity = new City("Miami");
+        tripDTO.departure = LocalDate.of(2023, 01, 10);
+        tripDTO.arrival = LocalDate.of(2023, 01, 20);
+
+        MvcResult resultCreated = mockMvc
+                .perform(MockMvcRequestBuilders.post("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tripDTO))
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        PeopleDTO peopleDTO = new PeopleDTO();
+        peopleDTO.firstName = "Joao";
+        peopleDTO.lastName = "Luis";
+
+        //Add first person to trip
+        String tripId = "3";
+
+        MvcResult resultAdded = mockMvc
+                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/People", tripId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(peopleDTO))
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String resultContent1 = resultAdded.getResponse().getContentAsString();
+        assertNotNull(resultContent1);
+
+
+        //Try to add the same person again
+        MvcResult resultAlreadyAdded = mockMvc
+                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/People", tripId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(peopleDTO))
+                )
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String resultContent2 = resultAlreadyAdded.getResponse().getContentAsString();
         assertNotNull(resultContent2);
         System.out.println(resultContent1);
     }

@@ -46,6 +46,13 @@ public class TripRepository implements TripRepositoryInt {
     }
 
     @Override
+    public Trip patchTrip(Trip trip) {
+        TripJPA toSave = assembler.toData(trip);
+        jpaRepository.save(toSave);
+        return trip;
+    }
+
+    @Override
     public boolean deleteById(Trip trip) {
         boolean isDeleted = false;
         TripId tripId = trip.getTripId();

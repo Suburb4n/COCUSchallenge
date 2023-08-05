@@ -126,19 +126,29 @@ class TripTest {
         Trip trip = new Trip(new TripId(1L),
                 new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
-        People personOne = mock(People.class);
-        People personTwo = mock(People.class);
+        People personOne = new People(new Name("Joao", "Luis"), new TripId(1l));
 
-        List<People> peopleList = mock(List.class);
-        peopleList.add(personOne);
-        peopleList.add(personTwo);
-        when(peopleList.size()).thenReturn(1);
-        when(peopleList.get(0)).thenReturn(personOne);
         //Act
-        trip.addPeople(peopleList);
+        trip.addPeople(personOne);
 
         //Assert
-        verify(peopleList, atLeast(1)).get(0);
+        assertTrue(trip.getPeople().contains(personOne));
+    }
+    @Test
+    void addPeopleAlreadyOnList(){
+        //Arrange
+        Trip trip = new Trip(new TripId(1L),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
+                LocalDate.of(2023,01,15)));
+        People personOne = new People(new Name("Joao", "Luis"), new TripId(1l));
+        trip.addPeople(personOne);
+
+        //Assert
+        assertThrows(IllegalArgumentException.class,()->{
+            trip.addPeople(personOne);
+        }, "Person is already on trip");
+
+
     }
 
 }

@@ -3,26 +3,32 @@ package org.example.services;
 import org.example.domain.valueobjects.People;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.AddedPeopleDTO;
+import org.example.dto.AddPeopleDTO;
+import org.example.dto.assembler.AddPeopleMapper;
 import org.example.repositories.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class AddPeopleService {
 
     private final TripRepository repository;
 
+    private final AddPeopleMapper mapper;
+
     @Autowired
-    public AddPeopleService(TripRepository repository){
+    public AddPeopleService(TripRepository repository, AddPeopleMapper mapper){
+
         this.repository =repository;
+        this.mapper = mapper;
     }
 
-    public AddedPeopleDTO addPeopleToTrip(List<People> people, TripId tripId){
-        Trip tripToAdd = repository.findById(tripId);
+    public AddPeopleDTO addPeopleToTrip(People people, TripId tripId){
+        Trip tripToPatch = repository.findById(tripId);
+        tripToPatch.addPeople(people);
+        repository.patchTrip(tripToPatch);
 
-        return new AddedPeopleDTO();
+        return mapper.toDto(tripId, people);
     }
 
 }

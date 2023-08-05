@@ -10,6 +10,8 @@ public interface TripRepositoryInt {
     Trip findById(TripId tripId);
     Trip save(Trip trip);
 
+    Trip patchTrip(Trip trip);
+
     boolean deleteById(Trip trip);
 
     List<Trip> findAll();

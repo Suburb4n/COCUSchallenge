@@ -1,6 +1,4 @@
 package org.example.domainmodel;
-
-import lombok.NoArgsConstructor;
 import org.example.domain.Trip.Trip;
 import org.example.domain.Trip.TripFactoryInt;
 import org.example.domain.valueobjects.City;

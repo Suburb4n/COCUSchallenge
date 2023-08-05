@@ -6,7 +6,7 @@ import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.dto.NewTripDTO;
-import org.example.dto.assembler.NewTripDataAssembler;
+import org.example.dto.assembler.NewTripMapper;
 import org.example.repositories.TripRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class CreateTripServiceTest {
     private TripRepository repository;
 
     @MockBean
-    private NewTripDataAssembler assembler;
+    private NewTripMapper assembler;
     @MockBean
     private Trip trip;
     @MockBean
