@@ -2,7 +2,7 @@ package org.example.dto.assembler;
 
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.City;
-import org.example.domain.valueobjects.Date;
+import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.dto.NewTripDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ class NewTripDataAssemblerTest {
     @MockBean
     private Trip trip;
     @MockBean
-    private Date date;
+    private TravelDuration date;
 
     @BeforeEach
     void setUp(){

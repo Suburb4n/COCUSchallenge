@@ -1,6 +1,5 @@
 package org.example.domain.valueobjects;
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ class DateTest {
 
     @Test
     void noArgsConstructor(){
-        Date date= new Date();
+        TravelDuration date= new TravelDuration();
 
         assertNull(date.getDeparture());
         assertNull(date.getArrival());
@@ -19,7 +18,7 @@ class DateTest {
 
     @Test
     void testEqualsHashCode_isSame(){
-        Date one = new Date(LocalDate.of(2000,01,01),
+        TravelDuration one = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
 
         boolean result = one.equals(one);
@@ -30,9 +29,9 @@ class DateTest {
 
     @Test
     void testEqualsHashCode_isEqual(){
-        Date one = new Date(LocalDate.of(2000,01,01),
+        TravelDuration one = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
-        Date two = new Date(LocalDate.of(2000,01,01),
+        TravelDuration two = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
         boolean result = one.equals(two);
 
@@ -42,9 +41,9 @@ class DateTest {
 
     @Test
     void testEqualsHashCode_departureNotEqual(){
-        Date one = new Date(LocalDate.of(2000,01,01),
+        TravelDuration one = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
-        Date two = new Date(LocalDate.of(1999,01,01),
+        TravelDuration two = new TravelDuration(LocalDate.of(1999,01,01),
                 LocalDate.of(2000,01,01));
         boolean result = one.equals(two);
 
@@ -54,9 +53,9 @@ class DateTest {
 
     @Test
     void testEqualsHashCode_arrivalNotEqual(){
-        Date one = new Date(LocalDate.of(2000,01,01),
+        TravelDuration one = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
-        Date two = new Date(LocalDate.of(2000,01,01),
+        TravelDuration two = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2001,01,01));
         boolean result = one.equals(two);
 
@@ -66,9 +65,9 @@ class DateTest {
 
     @Test
     void testEquals_isNull(){
-        Date one = new Date(LocalDate.of(2000,01,01),
+        TravelDuration one = new TravelDuration(LocalDate.of(2000,01,01),
                 LocalDate.of(2000,01,01));
-        Date two = null;
+        TravelDuration two = null;
         boolean result = one.equals(two);
 
         assertFalse(result);

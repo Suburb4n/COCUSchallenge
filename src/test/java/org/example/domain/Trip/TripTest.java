@@ -1,26 +1,30 @@
 package org.example.domain.Trip;
+import org.example.domain.valueobjects.People;
 import org.example.domain.valueobjects.City;
-import org.example.domain.valueobjects.Date;
+import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 class TripTest {
+
 
     @Test
     void checkSame_Valid(){
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Trip other = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         //Act
-        boolean result = one.checkSame(other);
+        boolean result = one.sameAs(other);
 
         //Assert
         assertTrue(result);
@@ -29,13 +33,13 @@ class TripTest {
     @Test
     void checkSame_Invalid(){
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Trip other = new Trip(new TripId(2L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         //Act
-        boolean result = one.checkSame(other);
+        boolean result = one.sameAs(other);
 
         //Assert
         assertFalse(result);
@@ -45,10 +49,10 @@ class TripTest {
     void equals_isEqual(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Trip other = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
 
         //Act
@@ -61,7 +65,7 @@ class TripTest {
     void equalsAndHashCode_isSame(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
 
         //Act
@@ -75,10 +79,10 @@ class TripTest {
     void equalsAndHashCode_isNotSame(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Trip other = new Trip(new TripId(2L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
 
         //Act
@@ -93,7 +97,7 @@ class TripTest {
     void isDiffObjectType(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Name name = new Name("Not", "Same");
 
@@ -107,13 +111,34 @@ class TripTest {
     void isNullObject(){
         //Arrange
         Trip one = new Trip(new TripId(1L),
-                new City("Lisboa"), new City("Bolonha"), new Date(LocalDate.of(2023,01, 10),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
         Trip other = null;
         //Act
         boolean result = one.equals(other);
         //Assert
         assertFalse(result);
+    }
+
+    @Test
+    void addPeopleSuccess(){
+        //Arrange
+        Trip trip = new Trip(new TripId(1L),
+                new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
+                LocalDate.of(2023,01,15)));
+        People personOne = mock(People.class);
+        People personTwo = mock(People.class);
+
+        List<People> peopleList = mock(List.class);
+        peopleList.add(personOne);
+        peopleList.add(personTwo);
+        when(peopleList.size()).thenReturn(1);
+        when(peopleList.get(0)).thenReturn(personOne);
+        //Act
+        trip.addPeople(peopleList);
+
+        //Assert
+        verify(peopleList, atLeast(1)).get(0);
     }
 
 }

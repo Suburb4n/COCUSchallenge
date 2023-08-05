@@ -3,10 +3,12 @@ package org.example.domain.valueobjects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.domain.interfaces.DomainId;
 
+import java.io.Serializable;
 import java.util.Objects;
 @NoArgsConstructor
-public class TripId {
+public class TripId implements DomainId, Serializable {
     @Getter
     @Setter
     private Long tripId;

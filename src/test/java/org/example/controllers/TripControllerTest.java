@@ -1,7 +1,7 @@
 package org.example.controllers;
 
 import org.example.domain.valueobjects.City;
-import org.example.domain.valueobjects.Date;
+import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.dto.NewTripDTO;
 import org.example.services.AddPeopleService;
@@ -29,7 +29,7 @@ class TripControllerTest {
 
     public NewTripDTO tripDTO;
 
-    private Date dates;
+    private TravelDuration dates;
     @MockBean
     private CreateTripService createService;
     @MockBean
@@ -53,7 +53,7 @@ class TripControllerTest {
 
     @BeforeEach
     void setUp(){
-        controller = new TripController(createService, addService,
+        controller = new TripController(createService,
                 listService, deleteService);
         this.tripDTO = new NewTripDTO();
         this.tripDTO.tripId = tripId;
@@ -61,7 +61,7 @@ class TripControllerTest {
         this.tripDTO.destCity = city;
         this.tripDTO.departure = date;
         this.tripDTO.arrival = date;
-        dates = new Date(tripDTO.departure, tripDTO.arrival);
+        dates = new TravelDuration(tripDTO.departure, tripDTO.arrival);
     }
 
     @Test

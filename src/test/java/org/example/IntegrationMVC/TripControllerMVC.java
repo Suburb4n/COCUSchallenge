@@ -39,7 +39,7 @@ public class TripControllerMVC {
         tripDTO.departure = LocalDate.of(2023, 01, 10);
         tripDTO.arrival = LocalDate.of(2023, 01, 20);
 
-        MvcResult result = mockMvc
+        MvcResult resultCreated = mockMvc
                 .perform(MockMvcRequestBuilders.post("/Trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -48,8 +48,20 @@ public class TripControllerMVC {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String resultContent1 = result.getResponse().getContentAsString();
+        String resultContent1 = resultCreated.getResponse().getContentAsString();
         assertNotNull(resultContent1);
+
+        MvcResult resultAlreadyExists = mockMvc
+                .perform(MockMvcRequestBuilders.post("/Trips")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tripDTO))
+                )
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String resultContent2 = resultAlreadyExists.getResponse().getContentAsString();
+        assertNotNull(resultContent2);
         System.out.println(resultContent1);
     }
 

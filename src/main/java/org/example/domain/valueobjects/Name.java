@@ -2,12 +2,12 @@ package org.example.domain.valueobjects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.example.domain.interfaces.ValueObject;
 
 import java.util.Objects;
 
 @NoArgsConstructor
-public class Name {
+public class Name implements ValueObject {
 
     @Getter
     private String firstName;

@@ -3,15 +3,15 @@ package org.example.domain.valueobjects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.domain.interfaces.ValueObject;
 
 import java.util.Objects;
 
 @NoArgsConstructor
-public class City {
+public class City implements ValueObject {
     @Getter
     @Setter
     private String city;
-
 
     public City(String city){
         this.city=city;

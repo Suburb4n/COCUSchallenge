@@ -1,7 +1,4 @@
-package org.example.domain.People;
-
-import org.example.domain.valueobjects.Name;
-import org.example.domain.valueobjects.TripId;
+package org.example.domain.valueobjects;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,6 +89,14 @@ class PeopleTest {
         boolean result = one.equals(other);
         //Assert
         assertFalse(result);
+    }
+
+    @Test
+    void EmptyConsctructor(){
+        People people = new People();
+
+        assertNull(people.getTripId());
+        assertNull(people.getName());
     }
 
 }

@@ -1,15 +1,25 @@
 package org.example.repositories;
 
+import com.sun.source.tree.AssertTree;
+import net.bytebuddy.dynamic.DynamicType;
 import org.example.domain.Trip.Trip;
+import org.example.domain.valueobjects.TripId;
+import org.example.domainmodel.TripJPA;
+import org.example.domainmodel.TripJPAAssembler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,79 +29,116 @@ import static org.mockito.Mockito.*;
 class TripRepositoryTest {
 
     private TripRepositoryInt repository;
-
     @MockBean
+    TripJPARepositoryInt jpaRepositoryInt;
+    @MockBean
+    private TripJPAAssembler assembler;
     private List<Trip> trips;
     @MockBean
-    private Trip newTrip;
+    private Trip trip;
+    @MockBean
+    private TripJPA tripJpa;
+    @MockBean
+    private TripId tripId;
 
     @BeforeEach
-    void setUp(){
-        this.repository  = new TripRepository(trips);
+    void setUp() {
+        trips = new ArrayList<>();
+        this.repository = new TripRepository(jpaRepositoryInt,assembler);
     }
 
     @Test
-    void saveIsValid(){
+    void saveIsValid() {
         //Arrange
-        when(trips.contains(newTrip)).thenReturn(false);
+        when(jpaRepositoryInt.existsById(tripId)).thenReturn(false);
+        when(assembler.toData(trip)).thenReturn(tripJpa);
+        when(jpaRepositoryInt.save(tripJpa)).thenReturn(tripJpa);
         //Act
-        Boolean result = repository.save(newTrip);
+        Trip result = repository.save(trip);
 
         //Assert
-        verify(trips).contains(newTrip);
-        verify(trips).add(newTrip);
+        assertEquals(trip, result);
+    }
+
+    @Test
+    void saveIsInvalid() {
+        //Arrange
+        String message = "Trip already exists!";
+        when(trip.getTripId()).thenReturn(tripId);
+        when(jpaRepositoryInt.existsById(tripId)).thenReturn(true);
+
+        //Act
+        Exception e = assertThrows(IllegalArgumentException.class,()->{
+            repository.save(trip);},message ) ;
+
+    }
+
+    @Test
+    void deleteById_Valid() {
+        //Arrange
+        Long test = 1L;
+        when(jpaRepositoryInt.existsById(tripId)).thenReturn(true);
+        when(trip.getTripId()).thenReturn(tripId);
+        when(tripId.getTripId()).thenReturn(test);
+        //Act
+        Boolean result = repository.deleteById(trip);
+
+        //Assert
+        verify(jpaRepositoryInt).deleteByTripId(test);
         assertTrue(result);
     }
 
     @Test
-    void saveIsInvalid(){
+    void deleteById_IdNotFound() {
         //Arrange
-        when(trips.contains(newTrip)).thenReturn(true);
+        when(jpaRepositoryInt.existsById(tripId)).thenReturn(false);
         //Act
-        Boolean result = repository.save(newTrip);
-
-        //Assert
-        verify(trips).contains(newTrip);
-        assertFalse(result);
-    }
-
-    @Test
-    void deleteById_Valid(){
-        //Arrange
-        when(trips.size()).thenReturn(1);
-        when(trips.get(0)).thenReturn(newTrip);
-        when(newTrip.checkSame(newTrip)).thenReturn(true);
-
-        //Act
-        Boolean result = repository.deleteById(newTrip);
-
-        //Assert
-        verify(trips).remove(0);
-        assertTrue(result);
-    }
-
-    @Test
-    void deleteById_IdNotFound(){
-        //Arrange
-        when(trips.size()).thenReturn(1);
-        when(trips.get(0)).thenReturn(newTrip);
-        when(newTrip.checkSame(newTrip)).thenReturn(false);
-
-        //Act
-        Boolean result = repository.deleteById(newTrip);
+        Boolean result = repository.deleteById(trip);
 
         //Assert
         assertFalse(result);
     }
 
     @Test
-    void findAllEmpty(){
-        String expected = "List is Empty";
+    void findAllEmpty() {
+        String expected = "No Trips saved.";
+
+        when(jpaRepositoryInt.findAll()).thenReturn(Collections.emptyList());
         //Act
-        Exception e = assertThrows(NullPointerException.class, ()->{
+        Exception e = assertThrows(IllegalArgumentException.class, () -> {
             repository.findAll();
         });
         //Assert
         assertEquals(expected, e.getMessage());
+    }
+
+
+    @Test
+    void findById_notFoundEmpty() {
+        //Arrange
+        String expected = "Trip not found!";
+        Optional<TripJPA> opt = mock(Optional.class);
+        when(jpaRepositoryInt.findById(tripId)).thenReturn(opt);
+        when(opt.isEmpty()).thenReturn(true);
+        //Act
+        Exception e = assertThrows(IllegalArgumentException.class, () -> {
+            repository.findById(tripId);
+        });
+
+        //Assert
+        assertEquals(expected, e.getMessage());
+    }
+    @Test
+    void findById_found() {
+        //Arrange
+        String expected = "Trip not found!";
+        Optional<TripJPA> opt = Optional.of(tripJpa);
+        when(jpaRepositoryInt.findById(tripId)).thenReturn(opt);
+        when(assembler.toDomain(tripJpa)).thenReturn(trip);
+        //Act
+        Trip result = repository.findById(tripId);
+
+        //Assert
+        assertEquals(trip, result);
     }
 }

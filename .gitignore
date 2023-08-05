@@ -199,3 +199,8 @@ README.html
 *.iml
 .idea
 .exercism
+
+###H2 and database files
+.h2.*
+*.db
+*.trace.db
