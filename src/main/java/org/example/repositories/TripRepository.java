@@ -53,11 +53,10 @@ public class TripRepository implements TripRepositoryInt {
     }
 
     @Override
-    public boolean deleteById(Trip trip) {
+    public boolean deleteByTripId(TripId tripId) {
         boolean isDeleted = false;
-        TripId tripId = trip.getTripId();
         if (jpaRepository.existsById(tripId)) {
-            jpaRepository.deleteByTripId(trip.getTripId().getTripId());
+            jpaRepository.deleteByTripId(tripId.getTripId());
             isDeleted = true;
         }
         return isDeleted;

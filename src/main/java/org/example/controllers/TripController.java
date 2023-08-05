@@ -62,4 +62,14 @@ public class TripController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/remove={tripId}")
+    public ResponseEntity<Object> deleteByTripId(@PathVariable Long tripId) {
+        TripId idToDelete = new TripId(tripId);
+        boolean operationSuccess = deleteService.deleteTripById(idToDelete);
+        if (operationSuccess) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Trip not found!",HttpStatus.BAD_REQUEST);
+    }
 }

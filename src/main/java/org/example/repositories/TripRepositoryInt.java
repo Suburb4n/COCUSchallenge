@@ -12,7 +12,7 @@ public interface TripRepositoryInt {
 
     Trip patchTrip(Trip trip);
 
-    boolean deleteById(Trip trip);
+    boolean deleteByTripId(TripId tripId);
 
     List<Trip> findAll();
 }

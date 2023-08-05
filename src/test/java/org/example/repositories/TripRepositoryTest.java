@@ -1,7 +1,5 @@
 package org.example.repositories;
 
-import com.sun.source.tree.AssertTree;
-import net.bytebuddy.dynamic.DynamicType;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
 import org.example.domainmodel.TripJPA;
@@ -9,16 +7,10 @@ import org.example.domainmodel.TripJPAAssembler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.swing.text.html.Option;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,17 +25,17 @@ class TripRepositoryTest {
     TripJPARepositoryInt jpaRepositoryInt;
     @MockBean
     private TripJPAAssembler assembler;
-    private List<Trip> trips;
     @MockBean
     private Trip trip;
     @MockBean
     private TripJPA tripJpa;
     @MockBean
     private TripId tripId;
+    @MockBean
+    private Optional<TripJPA> opt;
 
     @BeforeEach
     void setUp() {
-        trips = new ArrayList<>();
         this.repository = new TripRepository(jpaRepositoryInt,assembler);
     }
 
@@ -78,10 +70,9 @@ class TripRepositoryTest {
         //Arrange
         Long test = 1L;
         when(jpaRepositoryInt.existsById(tripId)).thenReturn(true);
-        when(trip.getTripId()).thenReturn(tripId);
         when(tripId.getTripId()).thenReturn(test);
         //Act
-        Boolean result = repository.deleteById(trip);
+        Boolean result = repository.deleteByTripId(tripId);
 
         //Assert
         verify(jpaRepositoryInt).deleteByTripId(test);
@@ -93,7 +84,7 @@ class TripRepositoryTest {
         //Arrange
         when(jpaRepositoryInt.existsById(tripId)).thenReturn(false);
         //Act
-        Boolean result = repository.deleteById(trip);
+        Boolean result = repository.deleteByTripId(tripId);
 
         //Assert
         assertFalse(result);
@@ -117,7 +108,6 @@ class TripRepositoryTest {
     void findById_notFoundEmpty() {
         //Arrange
         String expected = "Trip not found!";
-        Optional<TripJPA> opt = mock(Optional.class);
         when(jpaRepositoryInt.findById(tripId)).thenReturn(opt);
         when(opt.isEmpty()).thenReturn(true);
         //Act
