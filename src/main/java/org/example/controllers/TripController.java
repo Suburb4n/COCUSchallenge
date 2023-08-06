@@ -1,10 +1,9 @@
 package org.example.controllers;
-
 import org.example.domain.valueobjects.Name;
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.example.dto.NewTripDTO;
 import org.example.dto.FullTripDTO;
 import org.example.services.AddPeopleService;
@@ -16,14 +15,12 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/Trips")
+@RequestMapping(path = "/trips")
 public class TripController {
 
     private final CreateTripService createTripService;
@@ -61,27 +58,27 @@ public class TripController {
         }
     }
 
-    @PatchMapping("/{tripId}/People")
-    public ResponseEntity<Object> addPeopleToTrip(@PathVariable Long tripId, @RequestBody PeopleDTO peopleDto) {
+    @PatchMapping("/{tripId}/people")
+    public ResponseEntity<Object> addPeopleToTrip(@PathVariable Long tripId, @RequestBody PersonDTO peopleDto) {
         try {
             TripId newTripId = new TripId(tripId);
             Name name = new Name(peopleDto.firstName, peopleDto.lastName);
-            People people = new People(name, newTripId);
-            PeopleDTO peopleToAdd = addService.addPeopleToTrip(people, newTripId);
+            Person person = new Person(name, newTripId);
+            PersonDTO personToAdd = addService.addPeopleToTrip(person, newTripId);
             Link link = linkTo(methodOn(TripController.class)
                     .addPeopleToTrip(tripId, peopleDto))
                     .slash(tripId)
-                    .withRel("Trip");
+                    .withRel("trip");
 
-            peopleToAdd.add(link);
+            personToAdd.add(link);
 
-            return new ResponseEntity<>(peopleToAdd, HttpStatus.OK);
+            return new ResponseEntity<>(personToAdd, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/remove={tripId}")
+    @DeleteMapping("/{tripId}")
     public ResponseEntity<Object> deleteByTripId(@PathVariable Long tripId) {
         TripId idToDelete = new TripId(tripId);
         boolean operationSuccess = deleteService.deleteTripById(idToDelete);
@@ -99,7 +96,7 @@ public class TripController {
                 Link link = linkTo(methodOn(TripController.class)
                         .listTrips())
                         .slash(list.get(i).tripId.getTripId()).
-                        withRel("Trip");
+                        withRel("trip");
                 list.get(i).add(link);
             }
 

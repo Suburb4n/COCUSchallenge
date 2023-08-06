@@ -2,7 +2,7 @@ package org.example.domainmodel;
 import org.example.domain.Trip.Trip;
 import org.example.domain.Trip.TripFactoryInt;
 import org.example.domain.valueobjects.City;
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.TravelDuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,10 @@ public class TripJPAAssembler {
 
     private TripFactoryInt factory;
 
-    private PeopleJPAAssembler peopleAssembler;
+    private PersonJPAAssembler peopleAssembler;
 
     @Autowired
-    public TripJPAAssembler(TripFactoryInt factory, PeopleJPAAssembler peopleAssembler){
+    public TripJPAAssembler(TripFactoryInt factory, PersonJPAAssembler peopleAssembler){
         this.factory=factory;
         this.peopleAssembler = peopleAssembler;
     }
@@ -34,8 +34,8 @@ public class TripJPAAssembler {
                 departure, arrival);
 
         if(isPeoplePopulated(trip.getPeople())){
-            List<PeopleJPA> listJpa = peopleAssembler.listToData(trip.getPeople(), tripJpa);
-            tripJpa.setPeople(listJpa);
+            List<PersonJPA> peopleJpa = peopleAssembler.listToData(trip.getPeople(), tripJpa);
+            tripJpa.setPeople(peopleJpa);
         }
         return tripJpa;
     }
@@ -47,25 +47,25 @@ public class TripJPAAssembler {
                 tripJpa.getDeparture());
 
         if(isPeopleJpaPopulated(tripJpa.getPeople())){
-            List<People> list = peopleAssembler.listToDomain(tripJpa.getPeople());
-          return  factory.createTrip(tripJpa.getTripId(), origCity, destCity, duration, list);
+            List<Person> people = peopleAssembler.listToDomain(tripJpa.getPeople());
+          return  factory.createTrip(tripJpa.getTripId(), origCity, destCity, duration, people);
         }
         return factory.createTrip(tripJpa.getTripId(), origCity, destCity, duration);
     }
 
-    public List<Trip> listToDomain(List<TripJPA> list){
+    public List<Trip> listToDomain(List<TripJPA> triplList){
         List<Trip> tripList = new ArrayList<>();
 
-        for(int i = 0; i<list.size(); i++){
-            tripList.add(toDomain(list.get(i)));
+        for(int i = 0; i<triplList.size(); i++){
+            tripList.add(toDomain(triplList.get(i)));
         }
         return tripList;
     }
 
-    private static boolean isPeoplePopulated(List<People> people){
+    private static boolean isPeoplePopulated(List<Person> people){
         return !people.isEmpty();
     }
-    private static boolean isPeopleJpaPopulated(List<PeopleJPA> people){
+    private static boolean isPeopleJpaPopulated(List<PersonJPA> people){
         return !people.isEmpty();
     }
 }

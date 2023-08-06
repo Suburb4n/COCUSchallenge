@@ -3,7 +3,6 @@ package org.example.domain.valueobjects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.domain.interfaces.ValueObject;
-
 import java.time.LocalDate;
 import java.util.Objects;
 

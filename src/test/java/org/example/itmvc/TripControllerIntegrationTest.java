@@ -42,7 +42,7 @@ public class TripControllerMVC {
         tripDTO.arrival = LocalDate.of(2023, 01, 20);
 
         MvcResult resultCreated = mockMvc
-                .perform(MockMvcRequestBuilders.post("/Trips")
+                .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
@@ -54,7 +54,7 @@ public class TripControllerMVC {
         assertNotNull(resultContent1);
         // Tries to add the same Trip, should fail
         MvcResult resultAlreadyExists = mockMvc
-                .perform(MockMvcRequestBuilders.post("/Trips")
+                .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
@@ -78,7 +78,7 @@ public class TripControllerMVC {
         tripDTO.arrival = LocalDate.of(2023, 01, 20);
 
         MvcResult resultCreated = mockMvc
-                .perform(MockMvcRequestBuilders.post("/Trips")
+                .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
@@ -94,7 +94,7 @@ public class TripControllerMVC {
         String tripId = "3";
 
         MvcResult resultAdded = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/People", tripId)
+                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/people", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(peopleDTO))
@@ -108,7 +108,7 @@ public class TripControllerMVC {
 
         //Try to add the same person again
         MvcResult resultAlreadyAdded = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/People", tripId)
+                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/people", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(peopleDTO))
@@ -132,7 +132,7 @@ public class TripControllerMVC {
         tripDTO.arrival = LocalDate.of(2023, 01, 20);
 
         MvcResult resultCreated = mockMvc
-                .perform(MockMvcRequestBuilders.post("/Trips")
+                .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
@@ -147,7 +147,7 @@ public class TripControllerMVC {
         String tripId = "4";
         //Deletes said Trip
         MvcResult resultDeleted = mockMvc
-                .perform(MockMvcRequestBuilders.delete("/Trips/remove={tripId}", tripId)
+                .perform(MockMvcRequestBuilders.delete("/trips/{tripId}", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -159,7 +159,7 @@ public class TripControllerMVC {
 
         //Tries to delete already deleted Trip
         MvcResult resultnotFound = mockMvc
-                .perform(MockMvcRequestBuilders.delete("/Trips/remove={tripId}", tripId)
+                .perform(MockMvcRequestBuilders.delete("/trips/{tripId}", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -174,7 +174,7 @@ public class TripControllerMVC {
     void tripController_ListAllTrips() throws Exception {
         //Tries to get trips on an empty DB
         MvcResult resultNotFound = mockMvc
-                .perform(MockMvcRequestBuilders.get("/Trips")
+                .perform(MockMvcRequestBuilders.get("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -193,7 +193,7 @@ public class TripControllerMVC {
         tripDTO.arrival = LocalDate.of(2023, 01, 20);
 
         MvcResult resultCreated = mockMvc
-                .perform(MockMvcRequestBuilders.post("/Trips")
+                .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
@@ -203,7 +203,7 @@ public class TripControllerMVC {
 
         //Queries populated table for trips
         MvcResult resultFound = mockMvc
-                .perform(MockMvcRequestBuilders.get("/Trips")
+                .perform(MockMvcRequestBuilders.get("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )

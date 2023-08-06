@@ -19,5 +19,5 @@ public class FullTripDTO extends RepresentationModel<FullTripDTO>{
 
     public LocalDate arrival;
 
-    public List<PeopleDTO> people;
+    public List<PersonDTO> people;
 }

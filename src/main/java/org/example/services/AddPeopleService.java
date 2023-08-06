@@ -1,9 +1,9 @@
 package org.example.services;
 
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.example.dto.assembler.AddPeopleMapper;
 import org.example.repositories.TripRepositoryInt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class AddPeopleService {
         this.mapper = mapper;
     }
 
-    public PeopleDTO addPeopleToTrip(People people, TripId tripId){
+    public PersonDTO addPeopleToTrip(Person person, TripId tripId){
         Trip tripToPatch = repository.findById(tripId);
-        tripToPatch.addPeople(people);
+        tripToPatch.addPeople(person);
         repository.patchTrip(tripToPatch);
 
-        return mapper.toDto(tripId, people);
+        return mapper.toDto(tripId, person);
     }
 
 }

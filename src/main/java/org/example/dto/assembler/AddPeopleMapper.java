@@ -1,18 +1,18 @@
 package org.example.dto.assembler;
 
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AddPeopleMapper {
 
 
-    public PeopleDTO toDto(TripId tripId, People people) {
-            PeopleDTO dto = new PeopleDTO();
-            dto.firstName = people.getName().getFirstName();
-            dto.lastName = people.getName().getLastName();
+    public PersonDTO toDto(TripId tripId, Person person) {
+            PersonDTO dto = new PersonDTO();
+            dto.firstName = person.getName().getFirstName();
+            dto.lastName = person.getName().getLastName();
             dto.tripId = tripId.getTripId();
 
         return dto;

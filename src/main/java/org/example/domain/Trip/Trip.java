@@ -1,13 +1,10 @@
 package org.example.domain.Trip;
-
 import lombok.Getter;
-import lombok.Setter;
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.domain.interfaces.AggregateRoot;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +13,7 @@ public class Trip implements AggregateRoot<TripId> {
     @Getter
     private final TripId tripId;
     @Getter
-    private List<People> people;
+    private List<Person> people;
     @Getter
     private final City orgCity;
     @Getter
@@ -32,7 +29,7 @@ public class Trip implements AggregateRoot<TripId> {
         this.people = new ArrayList<>();
     }
 
-    protected Trip(TripId tripId,  City orgCity, City destCity, TravelDuration date, List<People> people) {
+    protected Trip(TripId tripId,  City orgCity, City destCity, TravelDuration date, List<Person> people) {
         this.tripId = tripId;
         this.orgCity = orgCity;
         this.destCity = destCity;
@@ -40,11 +37,11 @@ public class Trip implements AggregateRoot<TripId> {
         this.people = new ArrayList<>(people);
     }
 
-    public void addPeople(People peopleToAdd){
-            if(this.people.contains(peopleToAdd)){
+    public void addPeople(Person personToAdd){
+            if(this.people.contains(personToAdd)){
                 throw new IllegalArgumentException("Person is already on trip");
             }
-            people.add(peopleToAdd);
+            people.add(personToAdd);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package org.example.dto.assembler;
 
 import org.example.domain.Trip.Trip;
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.TripId;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.example.dto.FullTripDTO;
 import org.springframework.stereotype.Service;
 
@@ -36,17 +36,17 @@ public class FullTripMapper {
         dto.departure = trip.getDate().getDeparture();
         dto.arrival = trip.getDate().getArrival();
         if (!trip.getPeople().isEmpty()) {
-            List<PeopleDTO> people = peopleToDto(dto.tripId, trip.getPeople());
-            dto.people = people;
+            List<PersonDTO> person = peopleToDto(dto.tripId, trip.getPeople());
+            dto.people = person;
         }
         return dto;
     }
 
-    public List<PeopleDTO> peopleToDto(TripId tripId, List<People> people) {
-        List<PeopleDTO> listDto = new ArrayList<>();
+    public List<PersonDTO> peopleToDto(TripId tripId, List<Person> people) {
+        List<PersonDTO> listDto = new ArrayList<>();
         for (int i = 0; i < people.size(); i++) {
-            PeopleDTO toAdd = peopleMapper.toDto(tripId, people.get(i));
-            listDto.add(toAdd);
+            PersonDTO personDto = peopleMapper.toDto(tripId, people.get(i));
+            listDto.add(personDto);
         }
         return listDto;
     }

@@ -32,7 +32,7 @@ public class TripJPA {
     @Getter
     @Setter
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<PeopleJPA> people;
+    private List<PersonJPA> people;
 
     protected TripJPA(TripId tripId, String origCity, String destCity, LocalDate departure,
                       LocalDate arrival) {

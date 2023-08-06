@@ -8,7 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "People")
 @Entity
-public class PeopleJPA implements ValueObject {
+public class PersonJPA implements ValueObject {
     @Id
     @Getter
     @Column(name="First_Name")
@@ -25,7 +25,7 @@ public class PeopleJPA implements ValueObject {
     private TripJPA trip;
 
 
-    protected PeopleJPA(String firstName, String lastName, Long tripId, TripJPA trip) {
+    protected PersonJPA(String firstName, String lastName, Long tripId, TripJPA trip) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.tripId = tripId;
