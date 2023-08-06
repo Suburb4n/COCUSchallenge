@@ -1,15 +1,13 @@
 package org.example.domain.Trip;
-import org.example.domain.valueobjects.People;
+import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 class TripTest {
@@ -126,7 +124,7 @@ class TripTest {
         Trip trip = new Trip(new TripId(1L),
                 new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
-        People personOne = new People(new Name("Joao", "Luis"), new TripId(1l));
+        Person personOne = new Person(new Name("Joao", "Luis"), new TripId(1l));
 
         //Act
         trip.addPeople(personOne);
@@ -140,7 +138,7 @@ class TripTest {
         Trip trip = new Trip(new TripId(1L),
                 new City("Lisboa"), new City("Bolonha"), new TravelDuration(LocalDate.of(2023,01, 10),
                 LocalDate.of(2023,01,15)));
-        People personOne = new People(new Name("Joao", "Luis"), new TripId(1l));
+        Person personOne = new Person(new Name("Joao", "Luis"), new TripId(1l));
         trip.addPeople(personOne);
 
         //Assert

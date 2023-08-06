@@ -8,7 +8,7 @@ class PeopleJPATest {
 
     @Test
     void testEmptyConstructor(){
-        PeopleJPA peopleJpa = new PeopleJPA();
+        PersonJPA peopleJpa = new PersonJPA();
         assertNull(peopleJpa.getTrip());
         assertNull(peopleJpa.getFirstName());
         assertNull(peopleJpa.getLastName());

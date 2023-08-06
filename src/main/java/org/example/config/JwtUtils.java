@@ -1,4 +1,4 @@
-package org.example.authentication;
+package org.example.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

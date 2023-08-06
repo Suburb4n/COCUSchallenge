@@ -1,4 +1,4 @@
-package org.example.authentication;
+package org.example.config;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,8 +12,6 @@ import java.util.List;
 
 @Component
 public class UserDao {
-
-
     private final static List<UserDetails> APPLICATION_USERS = Arrays.asList(
             new User(
                     "dluis1651@gmail.com",

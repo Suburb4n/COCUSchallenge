@@ -7,9 +7,9 @@ class PeopleTest {
 
     @Test
     void checkSame_Valid() {
-        People one = new People(new Name("Maria", "Domingues"), new TripId(1L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
 
-        People other = new People(new Name("Maria", "Domingues"), new TripId(1L));
+        Person other = new Person(new Name("Maria", "Domingues"), new TripId(1L));
         //Act
         boolean result = one.checkSame(other);
 
@@ -19,10 +19,10 @@ class PeopleTest {
 
     @Test
     void checkSame_Invalid() {
-        People one = new People(new Name("Maria", "Domingues"), new TripId(1L));
-        People other = new People(new Name("Maria", "José"), new TripId(1L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
+        Person other = new Person(new Name("Maria", "José"), new TripId(1L));
         ;
-        People another = new People(new Name("Maria", "Domingues"), new TripId(2L));
+        Person another = new Person(new Name("Maria", "Domingues"), new TripId(2L));
         //Act
         boolean result = one.checkSame(other);
         boolean resultTwo = one.checkSame(another);
@@ -34,8 +34,8 @@ class PeopleTest {
     @Test
     void equals_isEqual() {
         //Arrange
-        People one = new People(new Name("Maria", "Domingues"), new TripId(1L));
-        People other = new People(new Name("Maria", "Domingues"), new TripId(1L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
+        Person other = new Person(new Name("Maria", "Domingues"), new TripId(1L));
 
         //Act
         Boolean result = one.equals(other);
@@ -46,7 +46,7 @@ class PeopleTest {
     @Test
     void equalsAndHashCode_isSame() {
         //Arrange
-        People one = new People(new Name("Maria", "Domingues"), new TripId(1L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
         //Act
         boolean result = one.equals(one);
         //Assert
@@ -57,8 +57,8 @@ class PeopleTest {
     @Test
     void equalsAndHashCode_isNotSame() {
         //Arrange
-        People one = new People(new Name("Maria", "Domingues"), new TripId(1L));
-        People other = new People(new Name("Maria", "Domingues"), new TripId(2L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
+        Person other = new Person(new Name("Maria", "Domingues"), new TripId(2L));
 
         //Act
         boolean result = one.equals(other);
@@ -71,7 +71,7 @@ class PeopleTest {
     @Test
     void isDiffObjectType() {
         //Arrange
-        People one = new People(new Name("Maria", "Domingues"), new TripId(2L));
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(2L));
         Name name = new Name("Not", "Same");
 
         //Act
@@ -83,8 +83,8 @@ class PeopleTest {
     @Test
     void isNullObject() {
         //Arrange
-        People one = new People(new Name("Maria", "Domingues"), new TripId(2L));
-        People other = null;
+        Person one = new Person(new Name("Maria", "Domingues"), new TripId(2L));
+        Person other = null;
         //Act
         boolean result = one.equals(other);
         //Assert
@@ -93,7 +93,7 @@ class PeopleTest {
 
     @Test
     void EmptyConsctructor(){
-        People people = new People();
+        Person people = new Person();
 
         assertNull(people.getTripId());
         assertNull(people.getName());

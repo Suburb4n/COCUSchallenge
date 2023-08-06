@@ -1,14 +1,18 @@
-package org.example.IntegrationMVC;
+package org.example.itmvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TripId;
+import org.example.dto.AuthenticationRequest;
 import org.example.dto.NewTripDTO;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,11 +23,12 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @SpringBootTest
-public class TripControllerMVC {
+public class TripControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,6 +38,7 @@ public class TripControllerMVC {
 
     @Test
     void tripController_CreateTrip() throws Exception {
+
         //Adds first Trip
         NewTripDTO tripDTO = new NewTripDTO();
         tripDTO.tripId = new TripId(1L);
@@ -46,25 +52,33 @@ public class TripControllerMVC {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
 
         String resultContent1 = resultCreated.getResponse().getContentAsString();
         assertNotNull(resultContent1);
+
         // Tries to add the same Trip, should fail
         MvcResult resultAlreadyExists = mockMvc
                 .perform(MockMvcRequestBuilders.post("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
         String resultContent2 = resultAlreadyExists.getResponse().getContentAsString();
         assertNotNull(resultContent2);
-        System.out.println(resultContent1);
     }
 
     @Test
@@ -82,11 +96,15 @@ public class TripControllerMVC {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
 
-        PeopleDTO peopleDTO = new PeopleDTO();
+        PersonDTO peopleDTO = new PersonDTO();
         peopleDTO.firstName = "Joao";
         peopleDTO.lastName = "Luis";
 
@@ -94,10 +112,14 @@ public class TripControllerMVC {
         String tripId = "3";
 
         MvcResult resultAdded = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/people", tripId)
+                .perform(MockMvcRequestBuilders.patch("/trips/{tripId}/people", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(peopleDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
@@ -108,10 +130,14 @@ public class TripControllerMVC {
 
         //Try to add the same person again
         MvcResult resultAlreadyAdded = mockMvc
-                .perform(MockMvcRequestBuilders.patch("/Trips/{tripId}/people", tripId)
+                .perform(MockMvcRequestBuilders.patch("/trips/{tripId}/people", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(peopleDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -123,6 +149,7 @@ public class TripControllerMVC {
 
     @Test
     void tripController_DeleteATrip() throws Exception {
+
         //Adds a trip to database
         NewTripDTO tripDTO = new NewTripDTO();
         tripDTO.tripId = new TripId(4L);
@@ -136,11 +163,15 @@ public class TripControllerMVC {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
 
-        PeopleDTO peopleDTO = new PeopleDTO();
+        PersonDTO peopleDTO = new PersonDTO();
         peopleDTO.firstName = "Joao";
         peopleDTO.lastName = "Luis";
 
@@ -150,6 +181,10 @@ public class TripControllerMVC {
                 .perform(MockMvcRequestBuilders.delete("/trips/{tripId}", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
@@ -162,6 +197,10 @@ public class TripControllerMVC {
                 .perform(MockMvcRequestBuilders.delete("/trips/{tripId}", tripId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -172,11 +211,16 @@ public class TripControllerMVC {
 
     @Test
     void tripController_ListAllTrips() throws Exception {
+
         //Tries to get trips on an empty DB
         MvcResult resultNotFound = mockMvc
                 .perform(MockMvcRequestBuilders.get("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -197,6 +241,10 @@ public class TripControllerMVC {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tripDTO))
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
@@ -206,6 +254,10 @@ public class TripControllerMVC {
                 .perform(MockMvcRequestBuilders.get("/trips")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("dluis1651@gmail.com")
+                                .password("password")
+                                .roles("ADMIN"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();

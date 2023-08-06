@@ -2,7 +2,7 @@ package org.example.controllers;
 
 import org.example.domain.valueobjects.*;
 import org.example.dto.FullTripDTO;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.example.dto.NewTripDTO;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,11 +56,11 @@ class TripControllerTest {
     private NewTripDTO tripDto;
 
     @MockBean
-    private PeopleDTO addedPeopleDto;
+    private PersonDTO addedPeopleDto;
 
-    private PeopleDTO peopleDto;
+    private PersonDTO peopleDto;
     private Long id;
-    private People people;
+    private Person people;
 
     @BeforeEach
     void setUp(){
@@ -77,9 +76,9 @@ class TripControllerTest {
         this.tripDTO.destCity = city;
         this.tripDTO.departure = date;
         this.tripDTO.arrival = date;
-        people = new People(new Name("Joao", "Luis"), tripId);
+        people = new Person(new Name("Joao", "Luis"), tripId);
         dates = new TravelDuration(tripDTO.departure, tripDTO.arrival);
-        peopleDto = new PeopleDTO();
+        peopleDto = new PersonDTO();
         peopleDto.firstName = "Joao";
         peopleDto.lastName = "Luis";
     }

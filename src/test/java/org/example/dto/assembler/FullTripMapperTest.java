@@ -3,7 +3,7 @@ package org.example.dto.assembler;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.*;
 import org.example.dto.FullTripDTO;
-import org.example.dto.PeopleDTO;
+import org.example.dto.PersonDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ class FullTripMapperTest {
     private FullTripDTO expected;
 
     private AddPeopleMapper peopleMapper;
-    private People people;
+    private Person people;
     private TripId tripId;
     @MockBean
     private Trip one;
@@ -42,7 +42,7 @@ class FullTripMapperTest {
         expected.destCity = new City("Miami");
         expected.departure = LocalDate.of(2023, 01, 10);
         expected.arrival = LocalDate.of(2023, 01, 20);
-        people = new People(new Name("Diogo", "Luis"), tripId);
+        people = new Person(new Name("Diogo", "Luis"), tripId);
 
     }
 
@@ -52,11 +52,11 @@ class FullTripMapperTest {
         TripId tripId = new TripId(1L);
         List<Trip> tripsList = new ArrayList<>();
         tripsList.add(one);
-        List<People> peopleList = new ArrayList<>();
+        List<Person> peopleList = new ArrayList<>();
         peopleList.add(people);
         List<FullTripDTO> expectedList = new ArrayList<>();
-        PeopleDTO dto = new PeopleDTO();
-        List<PeopleDTO> listDto = new ArrayList<>();
+        PersonDTO dto = new PersonDTO();
+        List<PersonDTO> listDto = new ArrayList<>();
         dto.firstName="Diogo";
         dto.lastName = "Luis";
         dto.tripId = 1L;
