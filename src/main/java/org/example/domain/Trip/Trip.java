@@ -26,6 +26,27 @@ public class Trip implements AggregateRoot<TripId> {
     @Getter
     private final TravelDuration travelDuration;
 
+
+    /**
+     * Creates a new Trip object with the provided tripId, origin city, destination city, and travel duration.
+     *
+     * This constructor initializes a new Trip object with the given TripId, origin City, destination City, and
+     * TravelDuration. It also validates the tripId and travelDuration to ensure they meet the required criteria.
+     * If the tripId or travelDuration is invalid, an exception will be thrown.
+     *
+     * Outside of the domain and domainTest package it can only be called by its respective Factory (TripFactory).
+     *
+     * After initializing the Trip object, an empty ArrayList is created for the people participating in the trip.
+     * The Trip object is then checked for any invalid parameters.
+     * If any exceptions occurred during validation,
+     * an InvalidTripParamsException is thrown with the corresponding exception messages.
+     *
+     * @param tripId The TripId representing the unique identifier of the trip.
+     * @param orgCity The City representing the origin city of the trip.
+     * @param destCity The City representing the destination city of the trip.
+     * @param travelDuration The TravelDuration representing the duration of the trip.
+     * @throws InvalidTripParamsException If there are any invalid parameters in the tripId or travelDuration.
+     */
     protected Trip(TripId tripId, City orgCity, City destCity, TravelDuration travelDuration) {
         this.tripId = tripId;
         validateTripId(tripId);

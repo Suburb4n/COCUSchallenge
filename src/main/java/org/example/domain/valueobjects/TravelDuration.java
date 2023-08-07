@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.example.exceptions.NoNullDatesException;
+import org.example.exceptions.NullDatesException;
 
 @NoArgsConstructor
 public class TravelDuration implements ValueObject {
@@ -19,9 +19,23 @@ public class TravelDuration implements ValueObject {
     @Getter
     private LocalDate departure;
 
+    /**
+     * Creates a new TravelDuration object with the provided departure and arrival dates.
+     *
+     * This constructor initializes a new TravelDuration object with the given departure and arrival dates.
+     * It checks if the departure or arrival dates are null, and if so, it adds a NoNullDatesException to
+     * the exceptions list. If both dates are non-null and there are no exceptions, it sets the departure
+     * and arrival dates in the TravelDuration object and then validates the dates to ensure they meet the
+     * required criteria. If the dates are invalid, an exception will be thrown.
+     *
+     * @param departure The LocalDate representing the departure date of the travel.
+     * @param arrival The LocalDate representing the arrival date of the travel.
+     * @throws NullDatesException If the departure or arrival dates are null.
+     * @throws DepartureAfterArrivalException If the departure or arrival dates are invalid.
+     */
     public TravelDuration(LocalDate departure, LocalDate arrival) {
         if(departure == null || arrival == null){
-            exceptions.add(new NoNullDatesException()) ;
+            exceptions.add(new NullDatesException()) ;
         }
         if(exceptions.isEmpty()) {
             this.departure = departure;

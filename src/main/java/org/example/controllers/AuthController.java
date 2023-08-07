@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,23 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDao userDao;
     private final JwtUtils jwtUtils;
+
+
+    /**
+     * Authenticates a user based on the provided authentication request.
+     *
+     * This method validates the user's credentials by authenticating the email and password
+     * against the authentication manager. If the authentication is successful and a user
+     * with the provided email is found in the database, a JSON Web Token (JWT) is generated
+     * and returned in the response body.
+     *
+     * @param request The AuthenticationRequest object containing the user's email and password.
+     * @return A ResponseEntity containing the generated JWT if the authentication is successful,
+     *         or a ResponseEntity with an error message if the authentication fails or the user
+     *         is not found.
+     * @throws AuthenticationException If the authentication process encounters an error or
+     *                                 the user is not authenticated.
+     */
 
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest request) {

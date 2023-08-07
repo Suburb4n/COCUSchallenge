@@ -22,7 +22,18 @@ public class AddPeopleService {
         this.repository =repository;
         this.mapper = mapper;
     }
-
+    /**
+     * Adds a person to an existing trip identified by the provided tripId.
+     *
+     * This method takes a Person object and a TripId as input parameters to add the person to
+     * the existing trip. It searches for the trip from the repository using the given tripId,and if found
+     * then adds the person to the trip using the `addPeople` method of the Trip object. The
+     * updated trip is then saved back to the repository using the `patchTrip` method.
+     *
+     * @param person The Person object, containing a first and last name, representing the person to be added to the trip.
+     * @param tripId The unique identifier of the trip to which the person will be added.
+     * @return A PersonDTO representing the details of the added person in the context of the trip.
+     */
     public PersonDTO addPeopleToTrip(Person person, TripId tripId){
         Trip tripToPatch = repository.findById(tripId);
         tripToPatch.addPeople(person);

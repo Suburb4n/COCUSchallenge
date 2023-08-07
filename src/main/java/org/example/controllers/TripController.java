@@ -43,6 +43,23 @@ public class TripController {
         this.addService = addService;
     }
 
+    /**
+     * Creates a new trip based on info stores in NewTripDTo, with tripId,
+     * Origin City, destination City and travelDuration.
+     *
+     * This method takes the details of a new trip in the form of a NewTripDTO object and attempts
+     * to create a new trip using the CreateTripService. If the trip creation is successful, the
+     * method generates a self-link using the TripController's createTrip method and adds it to the
+     * NewTripDTO. The created trip details are then returned in a ResponseEntity with HTTP status
+     * code 200 (OK).
+     *
+     * If the trip creation fails due to an exception, the method logs a warning message and returns
+     * a ResponseEntity with the error message and HTTP status code 400 (Bad Request).
+     *
+     * @param tripDTO The NewTripDTO containing the details of the new trip to be created.
+     * @return A ResponseEntity containing the NewTripDTO
+     * @throws Exception If an unexpected error occurs during trip creation.
+     */
     @PostMapping("")
     public ResponseEntity<Object> createTrip(@RequestBody NewTripDTO tripDTO) {
         try {
@@ -82,6 +99,25 @@ public class TripController {
         }
     }
 
+    /**
+     * Adds a person to an existing trip identified by the provided tripId.
+     *
+     * This method takes the tripId and the details of the person to be added in the form of a
+     * PersonDTO object. It creates a new Person object using the provided details and the tripId.
+     * Then, it attempts to add the person to the trip using the AddService. If the addition is
+     * successful, a self-link to the trip is generated using the TripController's addPeopleToTrip
+     * method and added to the PersonDTO. The PersonDTO with the updated details and the trip link
+     * is returned in a ResponseEntity with HTTP status code 200 (OK).
+     *
+     * If the addition fails due to an exception, the method logs a warning message and returns a
+     * ResponseEntity with HTTP status code 400 (Bad Request).
+     *
+     * @param tripId The unique identifier of the trip to which the person will be added.
+     * @param peopleDto The PersonDTO object containing the first and last name of the person to be added.
+     * @return A ResponseEntity containing the PersonDTO with the updated details and a link to the trip,
+     *         or a ResponseEntity with HTTP status code 400 (Bad Request) if the addition fails.
+     * @throws Exception If an unexpected error occurs during the addition of the person to the trip.
+     */
     @DeleteMapping("/{tripId}")
     public ResponseEntity<Object> deleteByTripId(@PathVariable Long tripId) {
         TripId idToDelete = new TripId(tripId);
@@ -94,6 +130,24 @@ public class TripController {
         return new ResponseEntity<>("Trip not found!", HttpStatus.BAD_REQUEST);
     }
 
+
+    /**
+     * Retrieves a list of all stored trips.
+     *
+     * This method calls the ListTripsService to fetch a list of all available trips represented
+     * as FullTripDTO objects. It then iterates through the list and generates a self-link for each
+     * trip using the TripController's listTrips method and the tripId. The self-links are added to
+     * the FullTripDTO objects. The list of FullTripDTO objects, each with a self-link, is returned
+     * in a ResponseEntity with HTTP status code 200 (OK).
+     *
+     * If no trips are found or an error occurs during the retrieval process, the method logs a
+     * warning message and returns a ResponseEntity with an error message and HTTP status code 400
+     * (Bad Request).
+     *
+     * @return A ResponseEntity containing a list of FullTripDTO objects, each representing an available trip
+     *         with a self-link, or a ResponseEntity with an error message if no trips are found.
+     * @throws Exception If an unexpected error occurs during the retrieval of the list of trips.
+     */
     @GetMapping("")
     public ResponseEntity<Object> listTrips() {
         try {
