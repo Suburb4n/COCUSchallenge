@@ -2,6 +2,8 @@ package org.example.domain.valueobjects;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
@@ -70,6 +72,51 @@ class NameTest {
         boolean result = one.equals(two);
 
         assertFalse(result);
+    }
+
+    @Test
+    public void testInvalidFirstName() {
+        // Arrange
+        String firstName = null;
+        String lastName = "Doe";
+
+        // Act
+        Name name = new Name(firstName, lastName);
+
+        // Assert
+        List<IllegalArgumentException> exceptions = name.getExceptions();
+        assertEquals(1, exceptions.size());
+        assertEquals("Invalid First Name", exceptions.get(0).getMessage());
+    }
+
+    @Test
+    public void testInvalidLastName() {
+        // Arrange
+        String firstName = "John";
+        String lastName = "";
+        // Act
+        Name name = new Name(firstName, lastName);
+        // Assert
+        List<IllegalArgumentException> exceptions = name.getExceptions();
+        assertEquals(1, exceptions.size());
+        assertEquals("Invalid Last Name", exceptions.get(0).getMessage());
+    }
+
+    @Test
+    public void testMultipleInvalidNames() {
+        // Arrange
+        String firstName = null;
+        String lastName = "";
+
+        // Act
+        Name name = new Name(firstName, lastName);
+
+        // Assert
+        List<IllegalArgumentException> exceptions = name.getExceptions();
+
+        assertEquals(2, exceptions.size());
+        assertEquals("Invalid First Name", exceptions.get(0).getMessage());
+        assertEquals("Invalid Last Name", exceptions.get(1).getMessage());
     }
 
 }

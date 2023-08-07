@@ -67,7 +67,7 @@ class FullTripMapperTest {
         when(one.getTripId()).thenReturn(tripId);
         when(one.getOrgCity()).thenReturn(new City("Orleans"));
         when(one.getDestCity()).thenReturn(new City("Miami"));
-        when(one.getDate()).thenReturn(new TravelDuration(LocalDate.of(2023, 01, 10),
+        when(one.getTravelDuration()).thenReturn(new TravelDuration(LocalDate.of(2023, 01, 10),
                 LocalDate.of(2023, 01, 20)));
         when(one.getPeople()).thenReturn(peopleList);
 

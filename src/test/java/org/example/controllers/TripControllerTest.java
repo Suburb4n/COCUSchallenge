@@ -4,6 +4,7 @@ import org.example.domain.valueobjects.*;
 import org.example.dto.FullTripDTO;
 import org.example.dto.PersonDTO;
 import org.example.dto.NewTripDTO;
+import org.example.exceptions.TripIdAlreadyExistsException;
 import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
@@ -49,8 +50,6 @@ class TripControllerTest {
     private LocalDate date;
     @MockBean
     private List<FullTripDTO> mockList;
-    @MockBean
-    private FullTripDTO fullTripDto;
 
     @MockBean
     private NewTripDTO tripDto;
@@ -60,7 +59,7 @@ class TripControllerTest {
 
     private PersonDTO peopleDto;
     private Long id;
-    private Person people;
+    private Person person;
 
     @BeforeEach
     void setUp(){
@@ -76,7 +75,7 @@ class TripControllerTest {
         this.tripDTO.destCity = city;
         this.tripDTO.departure = date;
         this.tripDTO.arrival = date;
-        people = new Person(new Name("Joao", "Luis"), tripId);
+        person = new Person(new Name("Joao", "Luis"), tripId);
         dates = new TravelDuration(tripDTO.departure, tripDTO.arrival);
         peopleDto = new PersonDTO();
         peopleDto.firstName = "Joao";
@@ -97,19 +96,22 @@ class TripControllerTest {
     void createTrip_alreadyExists(){
         //Arrange
         int statusCode = 400;
-        when(createService.createNewTrip(tripId, city, city,dates )).thenThrow(IllegalArgumentException.class);
+        when(createService.createNewTrip(tripId, city, city,dates )).thenThrow(new TripIdAlreadyExistsException());
         //Act
         ResponseEntity<Object> result = controller.createTrip(tripDTO);
         //Assert
         assertEquals(statusCode, result.getStatusCodeValue());
+        assertEquals("Trip already exists!", result.getBody());
     }
+
+
 
     @Test
     void addPeopleToTripSuccess(){
         //Arrange
 
         int statusCode = 200;
-        when(addService.addPeopleToTrip(people, tripId)).thenReturn(addedPeopleDto);
+        when(addService.addPeopleToTrip(person, tripId)).thenReturn(addedPeopleDto);
         //Act
         ResponseEntity<Object> result = controller.addPeopleToTrip(id, peopleDto);
         //Assert
@@ -119,7 +121,7 @@ class TripControllerTest {
     @Test
     void addPeopleToTrip_PeopleAlreadyInTrip(){
         //Arrange
-        when(addService.addPeopleToTrip(people, tripId)).thenThrow(IllegalArgumentException.class);
+        when(addService.addPeopleToTrip(person, tripId)).thenThrow(IllegalArgumentException.class);
 
         //Act
         ResponseEntity<Object> result = controller.addPeopleToTrip(id, peopleDto);

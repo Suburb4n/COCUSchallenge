@@ -12,8 +12,8 @@ public class NewTripMapper {
         dto.tripId = trip.getTripId();
         dto.origCity = trip.getOrgCity();
         dto.destCity = trip.getDestCity();
-        dto.departure = trip.getDate().getDeparture();
-        dto.arrival = trip.getDate().getArrival();
+        dto.departure = trip.getTravelDuration().getDeparture();
+        dto.arrival = trip.getTravelDuration().getArrival();
 
         return dto;
     }

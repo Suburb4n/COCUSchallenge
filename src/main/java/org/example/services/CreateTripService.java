@@ -30,6 +30,7 @@ public class CreateTripService {
     public NewTripDTO createNewTrip(TripId tripId, City origCity,
                                     City destCity, TravelDuration date){
         Trip newTrip = factory.createTrip(tripId, origCity, destCity,date);
+
         repository.save(newTrip);
         return assembler.toDto(newTrip);
     }

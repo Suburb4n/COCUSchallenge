@@ -2,6 +2,8 @@ package org.example.domain.valueobjects;
 
 import lombok.Getter;
 import org.example.domain.interfaces.ValueObject;
+import org.example.exceptions.InvalidPersonNameException;
+import java.util.List;
 import java.util.Objects;
 
 public class Person implements ValueObject {
@@ -12,7 +14,15 @@ public class Person implements ValueObject {
 
     public Person(Name name, TripId tripId) {
         this.name = name;
+        validateName(name);
         this.tripId = tripId;
+    }
+
+    private void validateName(Name name) throws IllegalArgumentException {
+        List<IllegalArgumentException> exceptions = name.getExceptions();
+        if(!name.getExceptions().isEmpty()){
+            throw new InvalidPersonNameException(exceptions);
+        }
     }
 
     public Person() {

@@ -47,7 +47,7 @@ class NewTripMapperTest {
         when(trip.getTripId()).thenReturn(new TripId(1L));
         when(trip.getOrgCity()).thenReturn(new City("Orleans"));
         when(trip.getDestCity()).thenReturn(new City("Miami"));
-        when(trip.getDate()).thenReturn(date);
+        when(trip.getTravelDuration()).thenReturn(date);
         when(date.getDeparture()).thenReturn(LocalDate.of(2023, 01, 10));
         when(date.getArrival()).thenReturn(LocalDate.of(2023, 01, 20));
 

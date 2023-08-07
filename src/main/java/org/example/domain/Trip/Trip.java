@@ -1,15 +1,20 @@
 package org.example.domain.Trip;
+
 import lombok.Getter;
 import org.example.domain.valueobjects.Person;
 import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.example.domain.interfaces.AggregateRoot;
+import org.example.exceptions.InvalidTripParamsException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Trip implements AggregateRoot<TripId> {
+    @Getter
+    private List<IllegalArgumentException> exceptions = new ArrayList<>();
     @Getter
     private final TripId tripId;
     @Getter
@@ -19,29 +24,48 @@ public class Trip implements AggregateRoot<TripId> {
     @Getter
     private final City destCity;
     @Getter
-    private final TravelDuration date;
+    private final TravelDuration travelDuration;
 
-    protected Trip(TripId tripId,  City orgCity, City destCity, TravelDuration date) {
+    protected Trip(TripId tripId, City orgCity, City destCity, TravelDuration travelDuration) {
         this.tripId = tripId;
+        validateTripId(tripId);
         this.orgCity = orgCity;
         this.destCity = destCity;
-        this.date = date;
+        this.travelDuration = travelDuration;
+        validateTravelDuration();
         this.people = new ArrayList<>();
+
+        if(!exceptions.isEmpty()){
+            throw new InvalidTripParamsException(exceptions);
+        }
+
     }
 
-    protected Trip(TripId tripId,  City orgCity, City destCity, TravelDuration date, List<Person> people) {
+    private void validateTripId(TripId tripId) {
+        if (!tripId.getException().isEmpty()) {
+            exceptions.add(tripId.getException().get(0));
+        }
+    }
+
+    private void validateTravelDuration() {
+        if (!travelDuration.getExceptions().isEmpty()) {
+            exceptions.add(travelDuration.getExceptions().get(0));
+        }
+    }
+
+    protected Trip(TripId tripId, City orgCity, City destCity, TravelDuration date, List<Person> people) {
         this.tripId = tripId;
         this.orgCity = orgCity;
         this.destCity = destCity;
-        this.date = date;
+        this.travelDuration = date;
         this.people = new ArrayList<>(people);
     }
 
-    public void addPeople(Person personToAdd){
-            if(this.people.contains(personToAdd)){
-                throw new IllegalArgumentException("Person is already on trip");
-            }
-            people.add(personToAdd);
+    public void addPeople(Person personToAdd) {
+        if (this.people.contains(personToAdd)) {
+            throw new IllegalArgumentException("Person is already on trip");
+        }
+        people.add(personToAdd);
     }
 
     @Override

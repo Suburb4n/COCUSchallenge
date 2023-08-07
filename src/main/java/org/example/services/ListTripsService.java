@@ -1,6 +1,5 @@
 package org.example.services;
 
-import lombok.NoArgsConstructor;
 import org.example.domain.Trip.Trip;
 import org.example.dto.FullTripDTO;
 import org.example.dto.assembler.FullTripMapper;

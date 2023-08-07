@@ -27,8 +27,8 @@ public class TripJPAAssembler {
 
         String origCity = trip.getOrgCity().getCity();
         String destCity = trip.getDestCity().getCity();
-        LocalDate departure = trip.getDate().getDeparture();
-        LocalDate arrival = trip.getDate().getArrival();
+        LocalDate departure = trip.getTravelDuration().getDeparture();
+        LocalDate arrival = trip.getTravelDuration().getArrival();
 
         TripJPA tripJpa = new TripJPA(trip.getTripId(), origCity, destCity,
                 departure, arrival);
@@ -44,7 +44,7 @@ public class TripJPAAssembler {
         City origCity = new City(tripJpa.getOrigCity());
         City destCity = new City(tripJpa.getDestCity());
         TravelDuration duration = new TravelDuration(tripJpa.getDeparture(),
-                tripJpa.getDeparture());
+                tripJpa.getArrival());
 
         if(isPeopleJpaPopulated(tripJpa.getPeople())){
             List<Person> people = peopleAssembler.listToDomain(tripJpa.getPeople());
@@ -62,10 +62,10 @@ public class TripJPAAssembler {
         return tripList;
     }
 
-    private static boolean isPeoplePopulated(List<Person> people){
+    protected static boolean isPeoplePopulated(List<Person> people){
         return !people.isEmpty();
     }
-    private static boolean isPeopleJpaPopulated(List<PersonJPA> people){
+    protected static boolean isPeopleJpaPopulated(List<PersonJPA> people){
         return !people.isEmpty();
     }
 }

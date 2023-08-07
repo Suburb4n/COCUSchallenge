@@ -33,8 +33,8 @@ public class FullTripMapper {
         dto.tripId = trip.getTripId();
         dto.origCity = trip.getOrgCity();
         dto.destCity = trip.getDestCity();
-        dto.departure = trip.getDate().getDeparture();
-        dto.arrival = trip.getDate().getArrival();
+        dto.departure = trip.getTravelDuration().getDeparture();
+        dto.arrival = trip.getTravelDuration().getArrival();
         if (!trip.getPeople().isEmpty()) {
             List<PersonDTO> person = peopleToDto(dto.tripId, trip.getPeople());
             dto.people = person;

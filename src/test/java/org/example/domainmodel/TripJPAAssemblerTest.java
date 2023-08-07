@@ -35,7 +35,7 @@ class TripJPAAssemblerTest {
     private List<Person> peopleList;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         factory = new TripFactory();
         peopleAssembler = new PersonJPAAssembler();
         tripAssembler = new TripJPAAssembler(factory, peopleAssembler);
@@ -43,33 +43,33 @@ class TripJPAAssemblerTest {
         tripId = new TripId(1L);
 
         trip = factory.createTrip(tripId, new City("Miami"), new City("Los Angeles"),
-                new TravelDuration(LocalDate.of(2000,01,01)
-                        ,LocalDate.of(2000,01,10)));
+                new TravelDuration(LocalDate.of(2000, 01, 01)
+                        , LocalDate.of(2000, 01, 10)));
 
 
-        tripJpa = new TripJPA(tripId, "Miami", "Los Angeles", LocalDate.of(2000,01,01)
-                ,LocalDate.of(2000,01,10));
+        tripJpa = new TripJPA(tripId, "Miami", "Los Angeles", LocalDate.of(2000, 01, 01)
+                , LocalDate.of(2000, 01, 10));
 
         one = new Person(new Name("Maria", "Joao"), new TripId(1L));
-        two = new Person(new Name("José", "Miguel"), new TripId(1L));
+        two = new Person(new Name("Jose", "Miguel"), new TripId(1L));
         three = new Person(new Name("Marta", "Maria"), new TripId(1L));
         peopleList = new ArrayList<>();
         peopleList.add(one);
         peopleList.add(two);
         peopleList.add(three);
 
-         tripWithPeople = factory.createTrip(tripId, new City("Miami"), new City("Los Angeles"),
-                new TravelDuration(LocalDate.of(2000,01,01)
-                        ,LocalDate.of(2000,01,10)),
+        tripWithPeople = factory.createTrip(tripId, new City("Miami"), new City("Los Angeles"),
+                new TravelDuration(LocalDate.of(2000, 01, 01)
+                        , LocalDate.of(2000, 01, 10)),
                 peopleList);
 
-        tripJpaWithPeople = new TripJPA(tripId, "Miami", "Los Angeles", LocalDate.of(2000,01,01)
-                ,LocalDate.of(2000,01,10));
+        tripJpaWithPeople = new TripJPA(tripId, "Miami", "Los Angeles", LocalDate.of(2000, 01, 01)
+                , LocalDate.of(2000, 01, 10));
 
-         peopleJpaList = new ArrayList<>();
-        PersonJPA oneJpa = new PersonJPA("Maria", "Joao", tripId.getTripId(),tripJpa);
-        PersonJPA twoJpa = new PersonJPA("José", "Miguel", tripId.getTripId(),tripJpa);
-        PersonJPA threeJpa = new PersonJPA("Marta", "Maria", tripId.getTripId(),tripJpa);
+        peopleJpaList = new ArrayList<>();
+        PersonJPA oneJpa = new PersonJPA("Maria", "Joao", tripId.getTripId(), tripJpa);
+        PersonJPA twoJpa = new PersonJPA("Jose", "Miguel", tripId.getTripId(), tripJpa);
+        PersonJPA threeJpa = new PersonJPA("Marta", "Maria", tripId.getTripId(), tripJpa);
 
         peopleJpaList.add(oneJpa);
         peopleJpaList.add(twoJpa);
@@ -78,7 +78,7 @@ class TripJPAAssemblerTest {
     }
 
     @Test
-    void toData_SuccessEmptyPeopleList(){
+    void toData_SuccessEmptyPeopleList() {
         //Arrange
 
         //Act
@@ -88,7 +88,7 @@ class TripJPAAssemblerTest {
     }
 
     @Test
-    void toData_SuccessPopulatedPeopleList(){
+    void toData_SuccessPopulatedPeopleList() {
         //Arrange
 
 
@@ -100,7 +100,7 @@ class TripJPAAssemblerTest {
     }
 
     @Test
-    void toDomain_EmptyPeopleList(){
+    void toDomain_EmptyPeopleList() {
         //Arrange
 
         //Act
@@ -109,8 +109,9 @@ class TripJPAAssemblerTest {
         assertEquals(trip, result);
         assertEquals(trip.getPeople().size(), result.getPeople().size());
     }
+
     @Test
-    void toDomain_listIsPopulated(){
+    void toDomain_listIsPopulated() {
         //Arrange
 
         //Act
@@ -121,7 +122,7 @@ class TripJPAAssemblerTest {
     }
 
     @Test
-    void listToDomain_listIsPopulated(){
+    void listToDomain_listIsPopulated() {
         //Arrange
         List<TripJPA> tripJpaList = new ArrayList<>();
         tripJpaList.add(tripJpa);
@@ -131,9 +132,56 @@ class TripJPAAssemblerTest {
         List<Trip> result = tripAssembler.listToDomain(tripJpaList);
         //Assert
         assertEquals(expected.size(), result.size());
-        for(int i = 0; i<result.size();i++){
+        for (int i = 0; i < result.size(); i++) {
             assertEquals(expected.get(i), result.get(i));
+            assertEquals(expected.get(i).getPeople(), result.get(i).getPeople());
+            assertEquals(expected.get(i).getOrgCity(), result.get(i).getOrgCity());
+            assertEquals(expected.get(i).getDestCity(), result.get(i).getDestCity());
+            assertEquals(expected.get(i).getTravelDuration().getArrival(), result.get(i).getTravelDuration().getArrival());
+            assertEquals(expected.get(i).getTripId(), result.get(i).getTripId());
         }
+    }
+
+    @Test
+    public void testIsPeoplePopulated() {
+        // Arrange
+        List<Person> people = new ArrayList<>();
+        people.add(new Person());
+        //Act
+        boolean result = tripAssembler.isPeoplePopulated(people);
+        //Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsPeopleNotPopulated() {
+        // Arrange
+        List<Person> people = new ArrayList<>();
+        //Act
+        boolean result = tripAssembler.isPeoplePopulated(people);
+        //Assert
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsPeopleJpaPopulated() {
+        // Arrange
+        List<PersonJPA> people = new ArrayList<>();
+        people.add(new PersonJPA("Joao", "Luis", 25L, new TripJPA()));
+        //Act
+        boolean result = tripAssembler.isPeopleJpaPopulated(people);
+        //Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsPeopleJpaNotPopulated() {
+        // Arrange
+        List<PersonJPA> people = new ArrayList<>();
+        //Act
+        boolean result = tripAssembler.isPeopleJpaPopulated(people);
+        //Assert
+        assertFalse(result);
     }
 
 }

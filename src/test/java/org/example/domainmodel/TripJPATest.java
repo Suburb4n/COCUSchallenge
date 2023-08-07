@@ -1,8 +1,5 @@
 package org.example.domainmodel;
 
-import org.example.domain.Trip.Trip;
-import org.example.domain.valueobjects.City;
-import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.TripId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

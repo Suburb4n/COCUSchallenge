@@ -1,19 +1,24 @@
 package org.example.repositories;
 
+import org.example.Main;
 import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
 import org.example.domainmodel.TripJPA;
 import org.example.domainmodel.TripJPAAssembler;
+import org.example.exceptions.TripIdAlreadyExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 @Repository
 public class TripRepository implements TripRepositoryInt {
+
+    private final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private TripJPARepositoryInt jpaRepository;
 
@@ -29,6 +34,7 @@ public class TripRepository implements TripRepositoryInt {
     public Trip findById(TripId tripId) {
         Optional<TripJPA> tripJpa = jpaRepository.findById(tripId);
         if (tripJpa.isEmpty()) {
+            logger.warn("Trip not found!");
             throw new IllegalArgumentException("Trip not found!");
         }
         return assembler.toDomain(tripJpa.get());
@@ -37,7 +43,7 @@ public class TripRepository implements TripRepositoryInt {
     @Override
     public Trip save(Trip trip) {
         if (jpaRepository.existsById(trip.getTripId())) {
-            throw new IllegalArgumentException("Trip already exists!") {
+            throw new TripIdAlreadyExistsException() {
             };
         }
         TripJPA toSave = assembler.toData(trip);

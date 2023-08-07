@@ -4,6 +4,7 @@ import org.example.domain.valueobjects.City;
 import org.example.domain.valueobjects.TravelDuration;
 import org.example.domain.valueobjects.Name;
 import org.example.domain.valueobjects.TripId;
+import org.example.exceptions.InvalidTripParamsException;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
@@ -145,8 +146,64 @@ class TripTest {
         assertThrows(IllegalArgumentException.class,()->{
             trip.addPeople(personOne);
         }, "Person is already on trip");
+    }
+    @Test
+    public void testInvalidTripId() {
+        // Arrange
+        TripId tripId = new TripId(null);
+        City orgCity = new City("Orleans");
+        City destCity = new City("New York");
+        TravelDuration travelDuration = new TravelDuration(LocalDate.of(2023,01, 10),
+                LocalDate.of(2023,01,15));
+
+        // Act
+        InvalidTripParamsException e = assertThrows(InvalidTripParamsException.class,
+                ()->{new Trip(tripId, orgCity, destCity, travelDuration);});
+        //Assert
+        assertEquals(1,e.getExceptions().size());
+        assertEquals("Trip Id cannot be null",
+                e.getExceptions().get(0).getMessage());
+    }
+
+    @Test
+    public void testInvalidTravelDuration() {
+        // Arrange
+        TripId tripId = new TripId(1L);
+        City orgCity = new City("Orleans");
+        City destCity = new City("New York");
+        TravelDuration travelDuration = new TravelDuration(LocalDate.of(2023,01, 10),
+                LocalDate.of(2022,01,15));
 
 
+        // Act
+        InvalidTripParamsException e = assertThrows(InvalidTripParamsException.class,
+                ()->{new Trip(tripId, orgCity, destCity, travelDuration);});
+        //Assert
+        assertEquals(1,e.getExceptions().size());
+        assertEquals("Please select a departure date before an arrival date.",
+                e.getExceptions().get(0).getMessage());
+    }
+
+    @Test
+    public void testInvalidTrip_BothExceptions() {
+        // Arrange
+        TripId tripId = new TripId(null);
+        City orgCity = new City("Orleans");
+        City destCity = new City("New York");
+        TravelDuration travelDuration = new TravelDuration(LocalDate.of(2023,01, 10),
+                null);
+
+        // Act
+        InvalidTripParamsException e = assertThrows(InvalidTripParamsException.class,
+                ()->{new Trip(tripId, orgCity, destCity, travelDuration);});
+        //Assert
+
+        assertEquals(2,e.getExceptions().size());
+        assertEquals("Trip Id cannot be null",
+                e.getExceptions().get(0).getMessage());
+        assertEquals("Please insert dates",
+                e.getExceptions().get(1).getMessage());
     }
 
 }
+

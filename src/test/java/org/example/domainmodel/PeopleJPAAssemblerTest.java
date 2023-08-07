@@ -32,7 +32,7 @@ class PeopleJPAAssemblerTest {
         tripJpa = new TripJPA(tripId, "Lx", "Porto", LocalDate.of(2000,01,01)
         ,LocalDate.of(2000,01,10));
         one = new Person(new Name("Maria", "Joao"), new TripId(1L));
-        two = new Person(new Name("José", "Miguel"), new TripId(1L));
+        two = new Person(new Name("Jose", "Miguel"), new TripId(1L));
         three = new Person(new Name("Marta", "Maria"), new TripId(1L));
 
         peopleList.add(one);
@@ -45,7 +45,7 @@ class PeopleJPAAssemblerTest {
         //Arrange
         List<PersonJPA> expected = new ArrayList<>();
         PersonJPA oneJpa = new PersonJPA("Maria", "Joao", tripId.getTripId(),tripJpa);
-        PersonJPA twoJpa = new PersonJPA("José", "Miguel", tripId.getTripId(),tripJpa);
+        PersonJPA twoJpa = new PersonJPA("Jose", "Miguel", tripId.getTripId(),tripJpa);
         PersonJPA threeJpa = new PersonJPA("Marta", "Maria", tripId.getTripId(),tripJpa);
 
         expected.add(oneJpa);
@@ -70,7 +70,7 @@ class PeopleJPAAssemblerTest {
         //Arrange
         List<PersonJPA> listPeopleJpa = new ArrayList<>();
         PersonJPA oneJpa = new PersonJPA("Maria", "Joao", tripId.getTripId(),tripJpa);
-        PersonJPA twoJpa = new PersonJPA("José", "Miguel", tripId.getTripId(),tripJpa);
+        PersonJPA twoJpa = new PersonJPA("Jose", "Miguel", tripId.getTripId(),tripJpa);
         PersonJPA threeJpa = new PersonJPA("Marta", "Maria", tripId.getTripId(),tripJpa);
 
         listPeopleJpa.add(oneJpa);

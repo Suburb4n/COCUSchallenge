@@ -4,13 +4,16 @@ import org.example.domain.Trip.Trip;
 import org.example.domain.valueobjects.TripId;
 import org.example.domainmodel.TripJPA;
 import org.example.domainmodel.TripJPAAssembler;
+import org.example.exceptions.TripIdAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import java.util.Collections;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,10 +63,24 @@ class TripRepositoryTest {
         when(jpaRepositoryInt.existsById(tripId)).thenReturn(true);
 
         //Act
-        Exception e = assertThrows(IllegalArgumentException.class,()->{
+        Exception e = assertThrows(TripIdAlreadyExistsException.class,()->{
             repository.save(trip);},message ) ;
 
     }
+
+    @Test
+    void patchIsValid() {
+        //Arrange
+
+        when(assembler.toData(trip)).thenReturn(tripJpa);
+        when(jpaRepositoryInt.save(tripJpa)).thenReturn(tripJpa);
+        //Act
+        Trip result = repository.save(trip);
+
+        //Assert
+        assertEquals(trip, result);
+    }
+
 
     @Test
     void deleteById_Valid() {
@@ -93,13 +110,27 @@ class TripRepositoryTest {
     void findAllEmpty() {
         String expected = "No Trips saved.";
 
-        when(jpaRepositoryInt.findAll()).thenReturn(Collections.emptyList());
         //Act
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
             repository.findAll();
         });
         //Assert
         assertEquals(expected, e.getMessage());
+    }
+    @Test
+    void findAllPopulated() {
+        List<Trip> tripList = new ArrayList<>();
+        tripList.add(trip);
+        List<TripJPA> tripJpaList = new ArrayList<>();
+        tripJpaList.add(tripJpa);
+
+        when(jpaRepositoryInt.findAll()).thenReturn(tripJpaList);
+        when(assembler.listToDomain(tripJpaList)).thenReturn(tripList);
+        //Act
+        List<Trip> result =repository.findAll();
+
+        //Assert
+        assertEquals(tripList, result);
     }
 
 
@@ -120,7 +151,6 @@ class TripRepositoryTest {
     @Test
     void findById_found() {
         //Arrange
-        String expected = "Trip not found!";
         Optional<TripJPA> opt = Optional.of(tripJpa);
         when(jpaRepositoryInt.findById(tripId)).thenReturn(opt);
         when(assembler.toDomain(tripJpa)).thenReturn(trip);

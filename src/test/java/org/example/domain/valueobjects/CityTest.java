@@ -7,6 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class CityTest {
 
     @Test
+    void noArgsConstructor(){
+        City city = new City();
+
+        assertNull(city.getCity());
+    }
+    @Test
     void testEqualsHashCode_isSame(){
         City one = new City("Miami");
 

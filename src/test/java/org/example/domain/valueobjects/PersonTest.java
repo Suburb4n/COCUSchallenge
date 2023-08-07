@@ -1,9 +1,12 @@
 package org.example.domain.valueobjects;
+import org.example.exceptions.InvalidPersonNameException;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PeopleTest {
+class PersonTest {
 
     @Test
     void checkSame_Valid() {
@@ -20,7 +23,7 @@ class PeopleTest {
     @Test
     void checkSame_Invalid() {
         Person one = new Person(new Name("Maria", "Domingues"), new TripId(1L));
-        Person other = new Person(new Name("Maria", "José"), new TripId(1L));
+        Person other = new Person(new Name("Maria", "Jose"), new TripId(1L));
         ;
         Person another = new Person(new Name("Maria", "Domingues"), new TripId(2L));
         //Act
@@ -97,6 +100,34 @@ class PeopleTest {
 
         assertNull(people.getTripId());
         assertNull(people.getName());
+    }
+
+    @Test
+    public void testInvalidPersonName() {
+        // Arrange
+        Name name = new Name("", "");
+        TripId tripId = new TripId(1L);
+
+        // Act
+        InvalidPersonNameException e = assertThrows(InvalidPersonNameException.class, () -> new Person(name, tripId));
+        List<IllegalArgumentException> list = e.getExceptions();
+        // Assert
+        assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testInvalidPersonMultipleNames() {
+        // Arrange
+        Name name = new Name("", "Doe");
+        TripId tripId = new TripId(1L);
+
+
+        // Act
+        InvalidPersonNameException e = assertThrows(InvalidPersonNameException.class, () -> new Person(name, tripId));
+        List<IllegalArgumentException> list = e.getExceptions();
+
+
+        assertEquals(1, list.size());
     }
 
 }

@@ -57,7 +57,7 @@ public class TripController {
             return new ResponseEntity<>(newTripDto, HttpStatus.OK);
         } catch (Exception e) {
             logger.warn("Trip creation failed, check if trip already exists!");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -74,7 +74,7 @@ public class TripController {
                     .withRel("trip");
 
             personToAdd.add(link);
-            logger.info("Person added do trip");
+            logger.info("Person added to trip");
             return new ResponseEntity<>(personToAdd, HttpStatus.OK);
         } catch (Exception e) {
             logger.warn("Adding failed. Check if people is already on trip!");
