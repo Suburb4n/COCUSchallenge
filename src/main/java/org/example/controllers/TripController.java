@@ -10,6 +10,8 @@ import org.example.services.AddPeopleService;
 import org.example.services.CreateTripService;
 import org.example.services.DeleteTripService;
 import org.example.services.ListTripsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(path = "/trips")
 public class TripController {
-
+    Logger logger = LoggerFactory.getLogger(TripController.class);
     private final CreateTripService createTripService;
 
     private final ListTripsService listTripsService;
@@ -51,9 +53,10 @@ public class TripController {
                     .createTrip(tripDTO))
                     .withSelfRel();
             newTripDto.add(link);
-
+            logger.info("Trip was successfully created");
             return new ResponseEntity<>(newTripDto, HttpStatus.OK);
         } catch (Exception e) {
+            logger.warn("Trip creation failed, check if trip already exists!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -71,9 +74,10 @@ public class TripController {
                     .withRel("trip");
 
             personToAdd.add(link);
-
+            logger.info("Person added do trip");
             return new ResponseEntity<>(personToAdd, HttpStatus.OK);
         } catch (Exception e) {
+            logger.warn("Adding failed. Check if people is already on trip!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -82,9 +86,11 @@ public class TripController {
     public ResponseEntity<Object> deleteByTripId(@PathVariable Long tripId) {
         TripId idToDelete = new TripId(tripId);
         boolean operationSuccess = deleteService.deleteTripById(idToDelete);
+        logger.info("Trip was deleted!");
         if (operationSuccess) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        logger.warn("Deleting failed. Check if trip exists!");
         return new ResponseEntity<>("Trip not found!", HttpStatus.BAD_REQUEST);
     }
 
@@ -99,9 +105,10 @@ public class TripController {
                         withRel("trip");
                 list.get(i).add(link);
             }
-
+            logger.info("Trips found!");
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
+            logger.warn("No trips found!");
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

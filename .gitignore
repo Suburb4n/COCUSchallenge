@@ -204,3 +204,6 @@ README.html
 .h2.*
 *.db
 *.trace.db
+
+### logging
+*.log
